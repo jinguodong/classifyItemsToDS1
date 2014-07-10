@@ -1,0 +1,45 @@
+#recommend{
+	background: white;
+	border-radius: 5px;
+	padding:20px;
+	min-height: 400px
+}
+#recommend .itemsContainer{
+	border-color: green;
+	border-width: 10px;
+	/*background: red;*/
+}
+#recommend .itemsContainer .item{
+	margin:6px;
+	width:165px;
+	height: 253px;
+	overflow: hidden;
+	border: 1px solid #e47911;
+	float:left;
+}
+#recommend .itemsContainer .itemInner{
+	margin:5px;
+	overflow: hidden;
+	/*background: yellow;*/
+	padding:1.5px;
+}
+#recommend .itemsContainer .itemInner .productImage{
+	width:150px;
+	height:160px;
+	background: green;
+}
+#recommend .itemsContainer .itemInner img{
+	display: block;
+	position:relative;
+	bottom:0;
+}
+#recommend .itemsContainer .itemInner .name{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.splitLine{
+	display: block;
+	clear:both;
+}

@@ -1,0 +1,34 @@
+<div class='recommend' id='recommend'>
+  <h2>Recommend Items to DropShip</h2>
+  <div class="pageNav">
+    <% for i in 0...@page_cnt %>
+      <span width="10px"><%= link_to "#{i+1}", :controller => "recommend", :action => "show", :id => i %></span>
+    <% end %>
+  </div>
+  <div class="itemsContainer">
+    <% @rec_items_final.each do |item| %>
+      <% v = item %>
+      <div class="item"> 
+        <div class="itemInner">
+          <div class="productImage">
+            <img src=<%= v['img_url'] %> />
+          </div>
+          <div class="name"><%= v['name'] %></div>
+          <div class="price">
+            <!-- <span class="listPrice">$41.99</span> -->
+            <span class="ourPrice">Price: $<%= v['cogs'] %></span>
+          </div>
+          <div class="velocity">
+            <span class="velocityAll">Vecocity: <%= v['velocity'] %></span>
+          </div>
+          <div class="reason">
+            <%= link_to "Why recommended?", :controller => "recommend", :action => "sub_show", :id => v %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+  <div class="splitLine"></div>
+  </div>
+
+</div>
