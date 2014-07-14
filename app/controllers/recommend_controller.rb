@@ -8,7 +8,8 @@ class RecommendController < ApplicationController
 		@id = params['id'].to_i
 		_start = @id * items_per_page
 		_end = _start + items_per_page
-		centers = CftdExperimentsClassCenterResult.all
+		# centers = CftdExperimentsClassCenterResult.all
+		centers = CftdCenterResultCnt.order("ds_cnt DESC").all
 		@item_all_cnt = 0
 		@item_rec_cnt = 0
 		res_n = CftdExperimentsItemsResult.select("COUNT(*) as cnt").where( ["1 = ? and is_dropship = 0", 1] ).all
@@ -51,6 +52,9 @@ class RecommendController < ApplicationController
 			# puts rec_items_asin_str
 			# puts "#{@rec_items_all}"
 		end
+
+		# write_to_txt_file(@rec_items_all, "items_reced.txt")
+
 		@rec_items_final = []
 		@page_cnt = (@rec_items_all.size()+items_per_page-1)/items_per_page
 		puts "all len #{@rec_items_all.size()} : id :#{_start} : #{_end}"
@@ -100,6 +104,16 @@ class RecommendController < ApplicationController
 			reced_item_all['exp_id'] = exp_id
 			_tem_item = Marshal.load(Marshal.dump(reced_item_all))
 			@reced_reason_ds_res_items_all << _tem_item
+		end
+	end
+
+	protected
+	def write_to_txt_file(items, file_name="")
+		_file_name = "#{file_name}"
+		File.open(_file_name, "a") do |f|
+			items.each do |item|
+				f.puts "#{item['asin']}"
+			end
 		end
 	end
 end
