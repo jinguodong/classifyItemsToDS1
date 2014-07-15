@@ -36,11 +36,11 @@
             <span class="velocityAll">Vecocity: <%= v['velocity'] %></span>
           </div>
           <div class="reason">
-            <%= link_to "Why recommended?", :controller => "recommend", :action => "sub_show", :id => v %>
+            <%= link_to "Compare with this?", :controller => "recommend", :action => "compare", :id => {:ds => v['asin'], :other => @reced_asin} %>
           </div>
         </div>
       </div>
-      <% break %>
+      <% #break %>
     <% end %>
     
   <div class="splitLine"></div>

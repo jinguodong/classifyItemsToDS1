@@ -39,13 +39,14 @@ class RecommendController < ApplicationController
 					rec_items_asin_str = rec_items_asin_str + ","
 				end
 				rec_items_asin_str = rec_items_asin_str + item['ASIN']
-				rec_item_all['name'] = item['ASIN']
-				rec_item_all['cogs'] = "#{45.6}"
-				rec_item_all['velocity'] = "#{123}"
-				rec_item_all['img_url'] = "http://ecx.images-amazon.com/images/I/410aTNdwfFL._SL500_SX150_.jpg"
-				rec_item_all['asin'] = item['ASIN']
+				_item_asin = item['ASIN'];
+				rec_item_all = get_info_by_asin(_item_asin)
+				if rec_item_all == nil
+					next
+				end
 				rec_item_all['class_id'] = class_id
 				rec_item_all['exp_id'] = exp_id
+
 				_tem_item = Marshal.load(Marshal.dump(rec_item_all))
 				@rec_items_all << _tem_item
 			end
@@ -95,16 +96,47 @@ class RecommendController < ApplicationController
 		reced_item_all = {}
 		@reced_reason_ds_res_items_all = []
 		reced_reason_ds_res.each do |item|
-			reced_item_all['name'] = item['ASIN']
-			reced_item_all['cogs'] = "#{45.6}"
-			reced_item_all['velocity'] = "#{123}"
-			reced_item_all['img_url'] = "http://ecx.images-amazon.com/images/I/410aTNdwfFL._SL500_SX150_.jpg"
-			reced_item_all['asin'] = item['ASIN']
-			reced_item_all['class_id'] = class_id
-			reced_item_all['exp_id'] = exp_id
+
+			_item_asin = item['ASIN']
+			reced_item_all = get_info_by_asin(_item_asin)
+			if reced_item_all == nil
+				next
+			end
+
 			_tem_item = Marshal.load(Marshal.dump(reced_item_all))
 			@reced_reason_ds_res_items_all << _tem_item
 		end
+	end
+
+	def compare
+		get_input = params["id"]
+		arr_input = get_input.split("&")
+		hash_input = {}
+		arr_input.each do |ele|
+			arr_ele = ele.split("=")
+			hash_input[arr_ele[0]] = arr_ele[1]
+		end
+		ds_asin = hash_input['ds']
+		other_asin = hash_input['other']
+
+		@ds_item = get_info_by_asin(ds_asin)
+		@other_item = get_info_by_asin(other_asin)
+		@ds_shipments = get_history_by_asin(ds_asin)
+		@other_shipments = get_history_by_asin(other_asin)
+		# p @other_shipments
+		# p @ds_shipments
+		# @other_date_list_price = []
+		@other_date_list_price = get_need_info(@other_shipments, 'list_price')
+		@other_date_our_price = get_need_info(@other_shipments, 'our_price')
+		@other_date_ship_charge = get_need_info(@other_shipments, 'ship_charge')
+		@other_date_cogs = get_need_info(@other_shipments, 'cogs')
+
+		@ds_date_list_price = []
+		@ds_date_list_price = get_need_info(@ds_shipments, 'list_price')
+		@ds_date_our_price = get_need_info(@ds_shipments, 'our_price')
+		@ds_date_ship_charge = get_need_info(@ds_shipments, 'ship_charge')
+		@ds_date_cogs = get_need_info(@ds_shipments, 'cogs')
+
 	end
 
 	protected
@@ -115,5 +147,65 @@ class RecommendController < ApplicationController
 				f.puts "#{item['asin']}"
 			end
 		end
+	end
+
+	def get_info_by_asin(asin)
+		reced_item_all = {}
+		_item_asin = asin
+		_item_name_res = AsinName.where( ["ASIN = ?", _item_asin] ).first
+		if _item_name_res == nil
+			return nil
+		end
+		_item_name = _item_name_res['ITEM_NAME']
+		_item_gl = _item_name_res['GL_PRODUCT_GROUP']
+		_item_msrp = _item_name_res['MSRP']
+		_item_shipping_weight = _item_name_res['SHIPPING_WEIGHT']
+		reced_item_all['name'] = _item_name
+		reced_item_all['cogs'] = "#{_item_msrp}"
+		reced_item_all['velocity'] = "#{_item_shipping_weight}kg"
+		_item_url_res = AsinUrl.where( ["ASIN = ?", _item_asin] ).first
+		if _item_url_res == nil
+			return nil
+		end
+		_item_img_url = _item_url_res["img_url2"]
+		reced_item_all['img_url'] = "#{_item_img_url}"
+		reced_item_all['asin'] = _item_asin
+		return reced_item_all
+	end
+
+	def get_history_by_asin(asin)
+		shipments = []
+		_item_asin = asin
+		_item_name_res = AsinCostShipPrice.where( ["ASIN = ?", _item_asin] ).order("ship_day").all
+		if _item_name_res == nil
+			return nil
+		end
+
+		_shipment = {}
+		_item_name_res.each do |_item|
+			_shipment["asin"] = _item['asin']
+			_shipment['ship_day'] = DateTime.parse(_item['ship_day'].to_s).strftime('%Y,%m,%d').to_s
+			_shipment['list_price'] = _item['list_price']
+			_shipment['our_price'] = _item['our_price']
+			
+			_shipment['ship_charge'] = _item['per_item_ship_charge']
+			_shipment['cogs'] = _item['item_fifo_cost']
+			_shipment['velocity'] = _item['quantity']
+			shipments << Marshal.load(Marshal.dump(_shipment))
+		end
+		return shipments
+	end
+
+	def get_need_info(shipments, column)
+		_need_infos = []
+		shipments.each do |shipment|
+			_date = shipment['ship_day']
+			_one_row = _date.split(',')
+			_one_row.collect! {|x| x.to_i}
+			_another_attr = shipment[column]
+			_one_row << _another_attr
+			_need_infos << Marshal.load(Marshal.dump(_one_row))
+		end
+		return _need_infos
 	end
 end

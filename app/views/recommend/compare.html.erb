@@ -1,0 +1,421 @@
+<div class='recommend' id='recommend'>
+  <h2>Recommended item to DropShip</h2>
+  <div class="itemsContainer">
+      <div class="item">
+        <div class="itemInner">
+          <div class="productImage">
+            <img src=<%= @other_item['img_url'] %> />
+          </div>
+          <div class="name"><%= @other_item['name'] %></div>
+          <div class="price">
+            <!-- <span class="listPrice">$41.99</span> -->
+            <span class="ourPrice">Price: $<%= @other_item['cogs'] %></span>
+          </div>
+          <div class="velocity">
+            <span class="velocityAll">Velocity: <%= @other_item['velocity'] %></span>
+          </div>
+        </div>
+      </div>
+  <div class="splitLine"></div>
+  </div>
+  <div> graph for Recommended item </div>
+  <div id='recommended_item_list_price' style="min-width:700px;height:400px">
+  </div>
+  <div id='recommended_item_our_price' style="min-width:700px;height:400px">
+  </div>
+  <div id='recommended_item_ship_charge' style="min-width:700px;height:400px">
+  </div>
+  <div id='recommended_item_cogs' style="min-width:700px;height:400px">
+  </div>
+  <div id='recommended_item_quantity' style="min-width:700px;height:400px">
+  </div>
+
+  <h2>Reason for recommendation</h2>
+  <div class="itemsContainer">
+    <% v = @ds_item %>
+    <div class="item">
+      <div class="itemInner">
+        <div class="productImage">
+          <img src=<%= v['img_url'] %> />
+        </div>
+        <div class="name"><%= v['name'] %></div>
+        <div class="price">
+          <!-- <span class="listPrice">$41.99</span> -->
+          <span class="ourPrice">Price: $<%= v['cogs'] %></span>
+        </div>
+        <div class="velocity">
+          <span class="velocityAll">Vecocity: <%= v['velocity'] %></span>
+        </div>
+        <div class="reason">
+          
+        </div>
+      </div>
+    </div>
+    <% #break %>
+    
+  <div class="splitLine"></div>
+  </div>
+  <div> graph for Recommended item </div>
+  <div id='ds_reason_item_list_price' style="min-width:700px;height:400px">
+  </div>
+  <div id='ds_reason_item_our_price' style="min-width:700px;height:400px">
+  </div>
+  <div id='ds_reason_item_ship_charge' style="min-width:700px;height:400px">
+  </div>
+  <div id='ds_reason_item_cogs' style="min-width:700px;height:400px">
+  </div>
+  <div id='ds_reason_item_quantity' style="min-width:700px;height:400px">
+  </div>
+
+</div>
+
+<script>
+$(function () {
+    $('#recommended_item_list_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of List Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'ListPirce($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_list_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#recommended_item_our_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Our Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Our Pirce($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_our_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#recommended_item_ship_charge').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Ship Charge'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Ship Charge($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_ship_charge.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#recommended_item_cogs').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Cost of Goods'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Cost of Goods($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_cogs.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+
+
+
+
+$(function () {
+    $('#ds_reason_item_list_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of List Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'List Pirce ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_list_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#ds_reason_item_our_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Our Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Our Price($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_our_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});   
+$(function () {
+    $('#ds_reason_item_ship_charge').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Ship Charge'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Ship Charge($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_ship_charge.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});   
+$(function () {
+    $('#ds_reason_item_cogs').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Cost of Goods'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Cost of Goods($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+            }
+        },
+        
+        series: [{
+            name: 'From 3-1 to 7-1',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_cogs.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});   
+</script>

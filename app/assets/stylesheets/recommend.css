@@ -32,6 +32,9 @@
 	display: block;
 	position:relative;
 	bottom:0;
+	max-height: 160px;
+	max-width: 150px;
+	margin:auto;
 }
 #recommend .itemsContainer .itemInner .name{
 	white-space: nowrap;
