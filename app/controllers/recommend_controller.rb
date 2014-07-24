@@ -117,6 +117,13 @@ class RecommendController < ApplicationController
 	end
 
 	def factor
+	end
+
+	def setting
+		'''Setting Decision Tree from UE
+
+		Which basket of ASIN in a vendor subset shall we place where? Which are the criteria.
+		The function just for mockup, none have been done.'''
 
 	end
 

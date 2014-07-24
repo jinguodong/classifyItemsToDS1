@@ -1,0 +1,154 @@
+<div class='recommend' id='recommend'>
+  <div>
+    <ul class="nav nav-tabs">
+      <li><a href="#" flag="nav" relate="custormer_demand_wrap">CD</a></li>
+      <li><a href="#" flag="nav" relate="vendor_profile_wrap">VP</a></li>
+      <li><a href="#" flag="nav" relate="asin_profile_wrap">ASIN</a></li>
+    </ul>
+  </div>
+  <%= form_tag({:controller => "recommend", :action => "deal"}, :method => "post", :class => "setting_form") do %>
+    <div class="session_content" id="custormer_demand_wrap">
+      <h4 style="color:orange">Customer Demand Profile</h4>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:high_multi_shipment_radio, "Hight Multi Shipment ratio") %>
+          <div class="element">
+            <%= text_field_tag(:high_multi_shipment_radio, 1.2) %>
+            <p class="help-block">Units per shipment. Discuss with Bill when the radio > 1.2, the ASIN should be in FC.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="input_element button_submit">
+
+          <input type="button" value="Next" relate="custormer_demand_wrap" next="vendor_profile_wrap" />
+          <div class="splitLine"></div>
+        </div>
+        
+        <div class="splitLine"></div>
+      </div>
+    </div>
+
+    <div class="session_content" id="vendor_profile_wrap" style="display:none">
+      <h4 style="color:orange">Vendor Profile</h4>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:low_daily_volumes, "Low Daily Volumes") %>
+          <div class="element">
+            <%= text_field_tag(:low_daily_volumes, "1") %>
+            <div class="splitLine"></div>
+            <p class="help-block">Velocity of the ASIN. If less than half a trunk - 15m3 product cube, the ASIN should be in Dropshipper, Vflex or FC. Vflex may be better.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_variability_of_demand_daily, "Variability of demand daily") %>
+          <div class="element">
+            <%= text_field_tag(:high_variability_of_demand_daily, 20) %>
+            <p class="help-block">If the variability of the ASIN, it would be distribute to High Variability of demand daily pattern of basket of ASINs</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_peakiness, "High Peakiness") %>
+          <div class="element">
+            <%= text_field_tag(:high_peakiness, "13%") %>
+            <p class="help-block">If the peakiness in two weeks of the ASIN capture 13% sales volume in a year, it should be High Peakiness.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+
+        <div class="input_element button_submit">
+          <a flag="pre" href="#">Prepage</a>
+          <input type="button" value="Next" relate="vendor_profile_wrap" next="asin_profile_wrap" />
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+
+    <div class="session_content" id="asin_profile_wrap" style="display:none">
+      <h4 style="color:orange">ASIN Profile</h4>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:slow_moving, "Slow Moving") %>
+          <div class="element">
+            <%= text_field_tag(:slow_moving, 1.2) %>
+            <p class="help-block">Slow moving in drop ship/fast moving vendor-flex/does not matter in 3PL</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_cube, "High Cube") %>
+          <div class="element">
+            <%= text_field_tag(:high_cube, "Large, HB???") %>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:multibox, "Multibox") %>
+          <div class="element">
+          <%= text_field_tag(:multibox, 1) %>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_risk_of_unhealthy_stock, "High risk of unhealthy stock") %>
+          <div class="element">
+            <%= text_field_tag(:high_risk_of_unhealthy_stock, 1) %>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_customer_returns, "High Customer Returns") %>
+          <div class="element">
+            <%= text_field_tag(:high_customer_returns, "1%/Quarter") %>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_vendor_returns, "High Vendor Returns") %>
+          <div class="element">
+            <%= text_field_tag(:high_vendor_returns, "1%/Quarter") %>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+
+        <div class="input_element button_submit">
+          <a flag="pre" href="#">Prepage</a>
+          <input type="submit" value="Submit" relate="asin_profile_wrap" />
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+
+    <div class="session_content"  style="display:none">
+      <h4 style="color:orange">Vendor Profile</h4>
+      <div class="input_result">
+        <p id="input_factors_show">Set factor weight can impact the result of recommendation. For example, List Price(0-1.0). If you set List Price be 0, then this factor may not make sense. While, if you set List Price be 1.0, then this factor will impact the result with max effort. So, if you do not sure how to set, just let it be default value. Then click submit button to submit your request.</p>
+      </div>
+    </div>
+    <div class="session_content"  style="display:none">
+      <h4 style="color:orange">ASIN Profile</h4>
+      <div class="input_result">
+        <p>When you submit, it may take some time to calculate and fatch data. So, be patient may help. But if it take more than 5 minutes, that may be anormal. If so, please let me know.<p>
+      </div>
+    </div>
+    <div class="session_content" id="settings_submit" style="display:none">
+      <%= submit_tag("Save") %>
+    </div>
+    
+  <% end %>
+
+
+  <div class="splitLine"></div>
+  </div>
+
+</div>

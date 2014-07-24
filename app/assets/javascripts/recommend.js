@@ -43,4 +43,19 @@ $(document).ready(function(){
 		}
 		$("#input_factors_show").html(_res);
 	});
+
+	$("a[flag='nav']").click(function(){
+		relate_content = $(this).attr("relate");
+		session_contents = $(".session_content").hide();
+		session_content = $(".session_content[id="+relate_content+"]")
+		session_content.show();
+	});
+
+	$("input[type='button']").click(function(){
+		relate = $(this).attr("relate");
+		next = $(this).attr("next");
+		$("#"+relate).hide();
+		$("#"+next).show();
+		return 0;
+	});
 });

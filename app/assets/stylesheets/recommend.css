@@ -1,8 +1,6 @@
 #recommend{
 	background: white;
 	border-radius: 5px;
-	padding:20px;
-	min-height: 400px
 }
 #recommend input[type='checkbox']{
 	float: left;
@@ -59,20 +57,36 @@
 }
 
 #recommend .setting_form{
-    padding:0px 20px 0px 20px;
 }
 
 #recommend .setting_form .session_content{
-    padding: 5px 0px 5px 0px;
 }
 
-#recommend .setting_form .session_content .input_elements{
-    margin-left: 20px;
-    margin-right: 20px;
+#recommend .setting_form .session_content h4{
+    margin:10px 0px 10px 180px;
 }
+
+
+#recommend .setting_form .session_content .input_elements{
+}
+
 #recommend .setting_form .session_content .input_elements .input_element{
-    min-width:33.3%;
-    display:block;
+    margin-bottom:20px;
+}
+#recommend .setting_form .session_content .input_elements .input_element.button_submit input{
+    width:84px;
+    height:42px;
+    float:right;
+}
+#recommend .setting_form .session_content .input_elements .input_element label{
+    width:160px;
+    text-align:right;
+    float:left;
+}
+#recommend .setting_form .session_content .input_elements .input_element .element{
+    margin:0px 6px 0px 20px;;
+    width:740px;
+    padding:0px 1px;
     float:left;
 }
 #recommend .setting_form .session_content .input_result{
@@ -105,8 +119,6 @@
     background: #12adad;
     text-decoration: none;
 }
-
-
 
 .splitLine{
 	display: block;
