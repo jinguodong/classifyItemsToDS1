@@ -4,6 +4,22 @@
 	padding:20px;
 	min-height: 400px
 }
+#recommend input[type='checkbox']{
+	float: left;
+	padding: 10px;
+	margin: 3px 8px 0px;
+}
+#recommend .display_hide{
+}
+#recommend .display_show{
+}
+#recommend .info_graph{
+	min-width:700px;
+	height:400px;
+	margin:auto;
+	margin-top:5px;
+	margin-bottom:10px;
+}
 #recommend .itemsContainer{
 	border-color: green;
 	border-width: 10px;
@@ -26,7 +42,7 @@
 #recommend .itemsContainer .itemInner .productImage{
 	width:150px;
 	height:160px;
-	background: green;
+	/*background: green;*/
 }
 #recommend .itemsContainer .itemInner img{
 	display: block;
@@ -41,6 +57,56 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+#recommend .setting_form{
+    padding:0px 20px 0px 20px;
+}
+
+#recommend .setting_form .session_content{
+    padding: 5px 0px 5px 0px;
+}
+
+#recommend .setting_form .session_content .input_elements{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#recommend .setting_form .session_content .input_elements .input_element{
+    min-width:33.3%;
+    display:block;
+    float:left;
+}
+#recommend .setting_form .session_content .input_result{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#recommend .setting_form .session_content input[type="submit"]{
+    min-width:100px;
+    min-height:40px;
+}
+
+
+#recommend .a_button a{
+    color:black;
+	width:100px;
+    height:30px;
+    display:block;
+    line-height:30px;
+    text-align:center;
+    border-radius:5px;
+    background:#676767;
+    border: 1px solid #454545;
+    text-decoration: none;
+}
+#recommend .a_button a:hover{
+    background: #ababab;
+    text-decoration: none;
+}
+#recommend .a_button a:active{
+    background: #12adad;
+    text-decoration: none;
+}
+
+
 
 .splitLine{
 	display: block;

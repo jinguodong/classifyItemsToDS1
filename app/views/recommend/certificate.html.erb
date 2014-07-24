@@ -1,0 +1,40 @@
+<div class='recommend' id='recommend'>
+  <h2>Recommend Items to DropShip</h2>
+  
+  <% @factors.each do |factor| %>
+  	<p><%= factor %> :<%= @result[factor] %></p>
+  <% end %>
+  <div class="session_content">
+  	<h3>Factor Weight to Use:</h3>
+  	<div class="factors_show">
+	    <div class="factor_show">
+	      <%= label_tag(:list_price, "List Price(0-1.0): ") %>
+	      <%= text_field_tag(:list_price, 0.2) %>
+	    </div>
+	    <div class="factor_show">
+	      <%= label_tag(:ship_charge, "Ship Charge(0-1.0): ") %>
+	      <%= text_field_tag(:ship_charge, 0.2) %>
+	    </div>
+	    <div class="factor_show">
+	      <%= label_tag(:our_price, "Our Price(0-1.0): ") %>
+	      <%= text_field_tag(:our_price, 0.2) %>
+	    </div>
+	    <div class="factor_show">
+	      <%= label_tag(:velocity_week, "Velocity Week(0-1.0): ") %>
+	      <%= text_field_tag(:velocity_week, 0.2) %>
+	    </div>
+	    <div class="factor_show">
+	      <%= label_tag(:cost_of_goods, "Cost Of Goods(0-1.0): ") %>
+	      <%= text_field_tag(:cost_of_goods, 0.2) %>
+	    </div>
+	    <div class="splitLine"></div>
+	  </div>
+	</div>
+  <div class="a_button">
+  	<%= link_to "OK", :controller => "recommend", :action => "deal", :local => @result %>
+  </div>
+  
+  <div class="splitLine"></div>
+  </div>
+
+</div>

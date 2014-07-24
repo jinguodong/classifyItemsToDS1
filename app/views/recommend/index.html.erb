@@ -1,0 +1,81 @@
+<div class='recommend' id='recommend'>
+  <h2>Recommend FC Items to Others</h2>
+  <%= form_tag({:controller => "recommend", :action => "factor"}, :method => "post", :class => "setting_form") do %>
+    <div class="session_content">
+      <h3>Fulfilment type to Choose:</h3>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:fulfil_type, "Fulfilment Type: ") %>
+          <%= select_tag(:fulfil_type, options_for_select(@fulfil_type, 1)) %>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+    <div class="session_content">
+      <h3>Scope to Set:</h3>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:market_place, "MarketPlace: ") %>
+          <%= select_tag(:market_place, options_for_select(@market_place, -1)) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:gl_product_group, "GL_PRODUCT_GROUP: ") %>
+          <%= select_tag(:gl_product_group, options_for_select(@gl_product_group, -1)) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:sub_gl_product_group, "SUB_GL_PRODUCT_GROUP: ") %>
+          <%= select_tag(:sub_gl_product_group, options_for_select(@sub_gl_product_group, -1)) %>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+    <!-- <div class="session_content">
+      <h3>Scope to Use:</h3>
+      <div class="input_result">
+        <p id="input_scope_show">market_place(-1)gl_product_group(-1)sub_gl_product_group(-1)</p>
+      </div>
+    </div>
+    <div class="session_content">
+      <h3>Factor Weight to Set:</h3>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:list_price, "List Price(0-1.0): ") %>
+          <%= text_field_tag(:list_price, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:ship_charge, "Ship Charge(0-1.0): ") %>
+          <%= text_field_tag(:ship_charge, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:our_price, "Our Price(0-1.0): ") %>
+          <%= text_field_tag(:our_price, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:velocity_week, "Velocity Week(0-1.0): ") %>
+          <%= text_field_tag(:velocity_week, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:cost_of_goods, "Cost Of Goods(0-1.0): ") %>
+          <%= text_field_tag(:cost_of_goods, 0.2) %>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+    <div class="session_content">
+      <h3>Factor Weight to Use:</h3>
+      <div class="input_result">
+        <p id="input_factors_show">list_price(0.2)ship_charge(0.2)our_price(0.2)velocity_week(0.2)cost_of_goods(0.2)</p>
+      </div>
+    </div> -->
+    <div class="session_content">
+      <h3>Submit your request:</h3>
+      <%= submit_tag("Submit") %>
+    </div>
+    
+  <% end %>
+
+
+  <div class="splitLine"></div>
+  </div>
+
+</div>

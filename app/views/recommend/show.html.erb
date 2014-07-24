@@ -1,5 +1,6 @@
 <div class='recommend' id='recommend'>
   <h2>Recommend Items to DropShip</h2>
+  <div class="note"><p class="note_content"><b>Note:</b>The items recommended are choosed by Kmeans Algorithm. Kmeans Algorithm would output K clusters by calculate the factors you choose of items. Recommended items are picked from every cluster. Because not all clusters have same items and same items belongs to DropShip, so the count of recommended items of each cluster might not same. For example: We use Kmeans Algorithm to distribute items to K clusters. Number 1 cluster contains 5000 items which consist of 2000 items belongs to DropShip and 3000 belongs to FC. Then I will recommend 200 items that belongs to FC in Number 1 cluster. Click "Why recommended?" to see Why recommend the item you choose.</p></div>
   <div class="pageNav">
     <% for i in 0...@page_cnt %>
       <span width="10px"><%= link_to "#{i+1}", :controller => "recommend", :action => "show", :id => i %></span>
@@ -18,8 +19,8 @@
             <!-- <span class="listPrice">$41.99</span> -->
             <span class="ourPrice">Price: $<%= v['cogs'] %></span>
           </div>
-          <div class="velocity">
-            <span class="velocityAll">Vecocity: <%= v['velocity'] %></span>
+          <div class="weight">
+            <span class="weightAll">Weight: <%= v['weight'] %></span>
           </div>
           <div class="reason">
             <%= link_to "Why recommended?", :controller => "recommend", :action => "sub_show", :id => v %>

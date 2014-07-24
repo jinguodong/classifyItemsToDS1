@@ -1,0 +1,53 @@
+<div class='recommend' id='recommend'>
+  <h2>Recommend Items to DropShip</h2>
+  <%= form_tag({:controller => "recommend", :action => "deal"}, :method => "post", :class => "setting_form") do %>
+    <div class="session_content">
+      <h3>Factor Weight to Set:</h3>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:list_price, "List Price(0-1.0): ") %>
+          <%= text_field_tag(:list_price, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:ship_charge, "Ship Charge(0-1.0): ") %>
+          <%= text_field_tag(:ship_charge, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:our_price, "Our Price(0-1.0): ") %>
+          <%= text_field_tag(:our_price, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:velocity_week, "Velocity Week(0-1.0): ") %>
+          <%= text_field_tag(:velocity_week, 0.2) %>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:cost_of_goods, "Cost Of Goods(0-1.0): ") %>
+          <%= text_field_tag(:cost_of_goods, 0.2) %>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+    <div class="session_content">
+      <h3>Remark:</h3>
+      <div class="input_result">
+        <p id="input_factors_show">Set factor weight can impact the result of recommendation. For example, List Price(0-1.0). If you set List Price be 0, then this factor may not make sense. While, if you set List Price be 1.0, then this factor will impact the result with max effort. So, if you do not sure how to set, just let it be default value. Then click submit button to submit your request.</p>
+      </div>
+    </div>
+    <div class="session_content">
+      <h3>Note:</h3>
+      <div class="input_result">
+        <p>When you submit, it may take some time to calculate and fatch data. So, be patient may help. But if it take more than 5 minutes, that may be anormal. If so, please let me know.<p>
+      </div>
+    </div>
+    <div class="session_content">
+      <h3>Submit your request:</h3>
+      <%= submit_tag("Submit") %>
+    </div>
+    
+  <% end %>
+
+
+  <div class="splitLine"></div>
+  </div>
+
+</div>

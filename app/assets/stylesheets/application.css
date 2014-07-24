@@ -23,3 +23,10 @@ body {
   padding: 20px 0;
   color: #999;
 }
+
+.floatLeft{
+	float:left;
+}
+.floatRight{
+	float:right;
+}
