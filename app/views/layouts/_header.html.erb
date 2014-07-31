@@ -18,6 +18,7 @@
     <li class="<%= 'active' if @active_tab == 'tools' %>"><a href="/">Tools</a></li> 
     <li class="<%= 'active' if @active_tab == 'issues' %>"><a href="/">Issues</a></li> 
     <li class="<%= 'active' if @active_tab == 'metrics' %>"><a href="/">Metrics</a></li>
+    <li class="<%= 'active' if @active_tab == 'asinSelection' %>"><a href="/">ASIN Selection</a></li>
   </ul>
   <%= form_tag("/nodes/search", :method => "get",:class=>"navbar-search pull-right", :style=>"margin-right: 5px;") do %>
     <input id="search-input" name="id" class="search-query" placeholder="Search " type="text"></input>

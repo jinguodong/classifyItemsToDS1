@@ -1,0 +1,590 @@
+<div class='recommend' id='recommend'>
+  <h2>Recommended item to DropShip</h2>
+  <div class="itemsContainer floatLeft">
+      <div class="item">
+        <div class="itemInner">
+          <div class="productImage">
+            <img src=<%= @other_item['img_url'] %> />
+          </div>
+          <div class="name"><%= @other_item['name'] %></div>
+          <div class="price">
+            <!-- <span class="listPrice">$41.99</span> -->
+            <span class="ourPrice">Price: $<%= @other_item['cogs'] %></span>
+          </div>
+          <div class="weight">
+            <span class="weightAll">Weight: <%= @other_item['weight'] %></span>
+          </div>
+        </div>
+      </div>
+    <div class="splitLine"></div>
+  </div>
+  <div class="dashBoard floatLeft">
+    <h3>Choose what you want to see:</h3>
+    <form>
+      <input type="checkbox" name="list_price" id="list_price" checked="checked" value='list_price' /><label for="list_price">List Price</label>
+      
+      <input type="checkbox" name="our_price" id="our_price" checked="checked" value="our_price" /><label for="our_price">Our Price</label>
+      
+      <input type="checkbox" name="ship_charge" id="ship_charge" checked="checked" value="ship_charge" /><label for="ship_charge">Ship Charge</label>
+      
+      <input type="checkbox" name="cost_of_goods" id="cost_of_goods" checked="checked" value="cogs"/><label for="cost_of_goods">Cost of Goods</label>
+      
+      <input type="checkbox" name="velocity_week" id="velocity_week" checked="checked" value="quantity" /><label for="velocity_week">Velocity/Week</label>
+    </form>
+  </div>
+  <div class="itemsContainer floatRight">
+    <% v = @ds_item %>
+    <div class="item">
+      <div class="itemInner">
+        <div class="productImage">
+          <img src=<%= v['img_url'] %> />
+        </div>
+        <div class="name"><%= v['name'] %></div>
+        <div class="price">
+          <!-- <span class="listPrice">$41.99</span> -->
+          <span class="ourPrice">Price: $<%= v['cogs'] %></span>
+        </div>
+        <div class="weight">
+          <span class="weightAll">Weight: <%= v['weight'] %></span>
+        </div>
+        <div class="reason">
+          
+        </div>
+      </div>
+    </div>
+    <% #break %>
+    
+    <div class="splitLine"></div>
+  </div>
+
+  <div class="splitLine"></div>
+
+  <div>
+    <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the List Price on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+    <div id='recommended_item_list_price' class="display_show info_graph">
+    </div>
+    <div id='ds_reason_item_list_price' class="display_show info_graph">
+    </div>
+  </div>
+
+  <div>
+    <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Our Price(Amazon Price) on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+    <div id='recommended_item_our_price' class="display_hide info_graph">
+    </div>
+    <div id='ds_reason_item_our_price' class="display_hide info_graph">
+    </div>
+  </div>
+
+  <div>
+    <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Ship Charge of Per item from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+    <div id='recommended_item_ship_charge' class="display_hide info_graph">
+    </div>
+    <div id='ds_reason_item_ship_charge' class="display_hide info_graph">
+    </div>
+  </div>
+
+  <div>
+    <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Cost of Goods of item from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+    <div id='recommended_item_cogs' class="display_hide info_graph">
+    </div>
+    <div id='ds_reason_item_cogs' class="display_hide info_graph">
+    </div>
+  </div>
+
+  <div>
+    <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Velocity per week from 2014-3-1 to 2014-6-30.</p></div>
+    <div id='recommended_item_quantity' class="display_hide info_graph">
+    </div>
+    <div id='ds_reason_item_quantity' class="display_hide info_graph">
+    </div>
+  </div>
+
+  <div class="splitLine"></div>
+</div>
+
+<script>
+$(function () {
+    $('#recommended_item_list_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of List Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'List Pirce ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'List Price' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "List Price of ASIN(<%= @other_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_list_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#recommended_item_our_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Our Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Our Pirce ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'Our Price' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "Our Price of ASIN(<%= @other_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_our_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#recommended_item_ship_charge').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Ship Charge'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Ship Charge($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'Ship Charge' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "Ship Charge of ASIN(<%= @other_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_ship_charge.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#recommended_item_cogs').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Cost of Goods'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Cost of Goods ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'Cost of Goods' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "Cost of Goods of ASIN(<%= @other_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @other_date_cogs.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+
+
+
+
+$(function () {
+    $('#ds_reason_item_list_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of List Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'List Pirce ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'List Pirce' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "List Pirce of ASIN(<%= @ds_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_list_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});
+$(function () {
+    $('#ds_reason_item_our_price').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Our Price'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Our Price ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'Our Price' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "Our Price of ASIN(<%= @ds_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_our_price.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});   
+$(function () {
+    $('#ds_reason_item_ship_charge').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Ship Charge'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Ship Charge ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'Ship Charge' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "Ship Charge of ASIN(<%= @ds_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_ship_charge.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});   
+$(function () {
+    $('#ds_reason_item_cogs').highcharts({
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Cost of Goods'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Cost of Goods ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'Cost of Goods' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: "Cost of Goods of ASIN(<%= @ds_item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: [
+                <% @ds_date_cogs.each do |item| %>
+                  [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+                <% end %>
+            ]
+        }]
+    });
+});   
+
+$(function () {
+    $('#recommended_item_quantity').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Recommended item'
+        },
+        subtitle: {
+            text: 'History info of Velocity/Week'
+        },
+        xAxis: {
+            categories: [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+            ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Rainf'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="color:{series.color}">{series.name}: </span><span>{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">Velocity: </td>' +
+                '<td style="padding:0"><b>{point.y} </b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Week',
+            data: [
+              <% (9..27).to_a.each do |i| %>
+                <%= @other_week_sum_quantity[i] %>,
+              <% end %>
+            ]
+
+        }]
+    });
+});
+
+$(function () {
+    $('#ds_reason_item_quantity').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Reason item'
+        },
+        subtitle: {
+            text: 'History info of Velocity/Week'
+        },
+        xAxis: {
+            categories: [
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+            ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Rainf'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="color:{series.color}">{series.name}: </span><span>{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">Velocity: </td>' +
+                '<td style="padding:0"><b>{point.y} </b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Week',
+            data: [
+              <% (9..27).to_a.each do |i| %>
+                <%= @ds_week_sum_quantity[i] %>,
+              <% end %>
+            ]
+
+        }]
+    });
+});
+
+</script>
+
+<script>
+// function changeStatus(param){
+//   if(param.checked){
+//     alert("jkjkjkjjkj");
+//   }else
+//   {
+//     alert("qweqweqwe");
+//   }
+// }
+</script>

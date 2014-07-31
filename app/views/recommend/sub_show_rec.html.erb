@@ -1,0 +1,32 @@
+<div class='recommend' id='recommend'>
+
+  <h2>Similar Items Already in <%= @local_params['fulfil_name'] %></h2>
+  <div class="note"><p class="note_content"><b>Note:</b>"Reason for recommendation" is for showing you How did we recommend the item above to you. "Reason for recommendation" contains 5 items that belong to <%= @local_params['fulfil_name'] %> and are in the same cluster of the item recommended. The reason items chosed by selecting the most closest to the center of the cluster. So you may say that many recommended items may have same reason items. Click "Compare to this?" to see the comparation between the recommended item and the reason item you choose.</p></div>
+  <div class="itemsContainer">
+    <% @reced_reason_ds_res_items_all.each do |item| %>
+      <% v = item %>
+      <div class="item"> 
+        <div class="itemInner">
+          <div class="productImage">
+            <img src=<%= v['img_url'] %> />
+          </div>
+          <div class="name"><%= v['name'] %></div>
+          <div class="price">
+            <!-- <span class="listPrice">$41.99</span> -->
+            <span class="ourPrice">Price: $<%= v['cogs'] %></span>
+          </div>
+          <div class="weight">
+            <span class="weightAll">Weight: <%= v['weight'] %></span>
+          </div>
+          <div class="reason">
+            <%= link_to "Compare with this?", :controller => "recommend", :action => "compare", :id => {:ds => v['asin'], :other => @reced_asin}, :local_params=>@local_params  %>
+          </div>
+        </div>
+      </div>
+      <% #break %>
+    <% end %>
+    
+  <div class="splitLine"></div>
+  </div>
+
+</div>

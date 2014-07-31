@@ -1,30 +1,40 @@
 <div class='recommend' id='recommend'>
-  <h2>Recommend FC Items to Others</h2>
+  <h4>Please select program, market place and product group you are interested in</h4>
   <%= form_tag({:controller => "recommend", :action => "setting"}, :method => "post", :class => "setting_form") do %>
     <div class="session_content">
-      <h3>Fulfilment type to Choose:</h3>
+      <h4 style="color:orange; display:none">Fulfilment type to Choose</h4>
       <div class="input_elements">
         <div class="input_element">
-          <%= label_tag(:fulfil_type, "Fulfilment Type: ") %>
-          <%= select_tag(:fulfil_type, options_for_select(@fulfil_type, 1)) %>
+          <%= label_tag(:fulfil_type, "Programs") %>
+          
+          <div class="element">
+            <%= select_tag(:fulfil_type, options_for_select(@fulfil_type, 1)) %>
+            <p class="help-block hide">Units per shipment. Discuss with Bill when the radio > 1.2, the ASIN should be in FC.</p>
+          </div>
         </div>
         <div class="splitLine"></div>
       </div>
     </div>
     <div class="session_content">
-      <h3>Scope to Set:</h3>
+      <h4 style="color:orange" class="hide">Scope to Set</h4>
       <div class="input_elements">
         <div class="input_element">
-          <%= label_tag(:market_place, "MarketPlace: ") %>
-          <%= select_tag(:market_place, options_for_select(@market_place, -1)) %>
+          <%= label_tag(:market_place, "MarketPlace") %>
+          <div class="element">
+            <%= select_tag(:market_place, options_for_select(@market_place, 1)) %>
+          </div>
         </div>
         <div class="input_element">
-          <%= label_tag(:gl_product_group, "GL_PRODUCT_GROUP: ") %>
-          <%= select_tag(:gl_product_group, options_for_select(@gl_product_group, -1)) %>
+          <%= label_tag(:gl_product_group, "Product Group") %>
+          <div class="element">
+            <%= select_tag(:gl_product_group, options_for_select(@gl_product_group, 468)) %>
+          </div>
         </div>
-        <div class="input_element">
-          <%= label_tag(:sub_gl_product_group, "SUB_GL_PRODUCT_GROUP: ") %>
-          <%= select_tag(:sub_gl_product_group, options_for_select(@sub_gl_product_group, -1)) %>
+        <div class="input_element" style="display:none">
+          <%= label_tag(:sub_gl_product_group, "SUB GL") %>
+          <div class="element">
+            <%= select_tag(:sub_gl_product_group, options_for_select(@sub_gl_product_group, 1)) %>
+          </div>
         </div>
         <div class="splitLine"></div>
       </div>
@@ -68,8 +78,9 @@
       </div>
     </div> -->
     <div class="session_content">
-      <h3>Submit your request:</h3>
-      <%= submit_tag("Submit") %>
+      <div class="submit_wrap">
+        <%= submit_tag("Submit") %>
+      </div>
     </div>
     
   <% end %>

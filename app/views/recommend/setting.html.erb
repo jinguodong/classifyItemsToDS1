@@ -1,26 +1,41 @@
 <div class='recommend' id='recommend'>
   <div>
     <ul class="nav nav-tabs">
-      <li><a href="#" flag="nav" relate="custormer_demand_wrap">CD</a></li>
-      <li><a href="#" flag="nav" relate="vendor_profile_wrap">VP</a></li>
-      <li><a href="#" flag="nav" relate="asin_profile_wrap">ASIN</a></li>
+      <li><span class="left"></span><a href="#" flag="nav" relate="custormer_demand_wrap" class="bg_eee">Customer Demand</a><span class="left"></span></li>
+      <li><a href="#" flag="nav" relate="vendor_profile_wrap">Vendor Profile</a></li>
+      <li><a href="#" flag="nav" relate="asin_profile_wrap">ASIN Profile</a></li>
+      <li><a href="#" flag="nav" relate="cost_profile_wrap">Finance</a></li>
+      
     </ul>
   </div>
   <%= form_tag({:controller => "recommend", :action => "deal"}, :method => "post", :class => "setting_form") do %>
+    <div style="display:none">
+      <input type='text' name="fulfil_name" value="<%= @fulfil_name %>" />
+    </div>
     <div class="session_content" id="custormer_demand_wrap">
-      <h4 style="color:orange">Customer Demand Profile</h4>
+      <h4 style="color:orange" class="hide">Customer Demand Profile</h4>
       <div class="input_elements">
         <div class="input_element">
-          <%= label_tag(:high_multi_shipment_radio, "Hight Multi Shipment ratio") %>
+          <%= label_tag(:shipment_radio, "Multiple Units per shipment") %>
           <div class="element">
-            <%= text_field_tag(:high_multi_shipment_radio, 1.2) %>
-            <p class="help-block">Units per shipment. Discuss with Bill when the radio > 1.2, the ASIN should be in FC.</p>
+            <span>between</span><%= text_field_tag(:shipment_radio, 1.2, :class=>"margin_lr_5 width_35 align_center") %><span>and</span><%= text_field_tag(:shipment_radio_up, 1.3,:class=>"margin_lr_5 width_35 align_center") %><span>units</span>
+            <p class="help-block hide">Units per shipment. Discuss with Bill when the radio > 1.2, the ASIN should be in FC.</p>
           </div>
           <div class="splitLine"></div>
         </div>
+        <div class="input_element">
+          <%= label_tag(:multiple_units_per_order, "Multiple Units Per Order") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:multiple_units_per_order, 1.5, :class=>"margin_lr_5 width_35 align_center") %><span>and</span><%= text_field_tag(:multiple_units_per_order_up, 1.8, :class=>"margin_lr_5 width_35 align_center") %><span>units</span>
+            <div class="splitLine"></div> 
+            <p class="help-block"></p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+
         <div class="input_element button_submit">
 
-          <input type="button" value="Next" relate="custormer_demand_wrap" next="vendor_profile_wrap" />
+          <input type="button" attr="next_button" value="Next" relate="custormer_demand_wrap" next="vendor_profile_wrap" />
           <div class="splitLine"></div>
         </div>
         
@@ -29,39 +44,54 @@
     </div>
 
     <div class="session_content" id="vendor_profile_wrap" style="display:none">
-      <h4 style="color:orange">Vendor Profile</h4>
+      <h4 style="color:orange" class='hide'>Vendor Profile</h4>
       <div class="input_elements">
         <div class="input_element">
-          <%= label_tag(:low_daily_volumes, "Low Daily Volumes") %>
+          <%= label_tag(:low_weekly_volumes, "weekly volume") %>
           <div class="element">
-            <%= text_field_tag(:low_daily_volumes, "1") %>
+            <span>between</span><%= text_field_tag(:low_weekly_volumes, "11.5", :class=>"margin_lr_5 width_35 align_center") %><span>and</span><%= text_field_tag(:low_weekly_volumes_up, "15.5", :class=>"margin_lr_5 width_35 align_center") %><span>units</span>
             <div class="splitLine"></div>
-            <p class="help-block">Velocity of the ASIN. If less than half a trunk - 15m3 product cube, the ASIN should be in Dropshipper, Vflex or FC. Vflex may be better.</p>
+            <p class="help-block">Average weekly Velocity of the ASIN.</p>
           </div>
           <div class="splitLine"></div>
         </div>
         <div class="splitLine"></div>
         <div class="input_element">
-          <%= label_tag(:high_variability_of_demand_daily, "Variability of demand daily") %>
+          <%= label_tag(:high_variability_of_demand_weekly, "Variability of demand") %>
           <div class="element">
-            <%= text_field_tag(:high_variability_of_demand_daily, 20) %>
-            <p class="help-block">If the variability of the ASIN, it would be distribute to High Variability of demand daily pattern of basket of ASINs</p>
+            <span>between</span><%= text_field_tag(:high_variability_of_demand_weekly, "11.5", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:high_variability_of_demand_weekly_up, "15.5", :class=>"margin_lr_5 width_35 align_center") %><span>%</span>
+            <p class="help-block">We measure Variability of Demand by standard deviation of volume/average volume</p>
           </div>
           <div class="splitLine"></div>
         </div>
         <div class="splitLine"></div>
         <div class="input_element">
-          <%= label_tag(:high_peakiness, "High Peakiness") %>
+          <%= label_tag(:high_peakiness, "Peakiness") %>
           <div class="element">
-            <%= text_field_tag(:high_peakiness, "13%") %>
-            <p class="help-block">If the peakiness in two weeks of the ASIN capture 13% sales volume in a year, it should be High Peakiness.</p>
+            <span>between</span><%= text_field_tag(:high_peakiness, "13.5", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:high_peakiness_up, "55.5", :class=>"margin_lr_5 width_35 align_center") %><span>%</span>
+            <p class="help-block">we measure peakiness by proportion fo volume in peak weeks, from week of thanks giving to end of year.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="input_element">
+          <%= label_tag(:high_customer_returns, "Customer returns") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:high_customer_returns, "1.5", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:high_customer_returns_up, "5.5", :class=>"margin_lr_5 width_35 align_center") %><span>%/Quarter</span>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:high_vendor_returns, "Vendor returns") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:high_vendor_returns, "1.5", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:high_vendor_returns_up, "5.5", :class=>"margin_lr_5 width_35 align_center") %><span>%/Quarter</span>
           </div>
           <div class="splitLine"></div>
         </div>
 
         <div class="input_element button_submit">
-          <a flag="pre" href="#">Prepage</a>
-          <input type="button" value="Next" relate="vendor_profile_wrap" next="asin_profile_wrap" />
+          <input type="button" attr="pre_button" value="Prepage" relate="vendor_profile_wrap" pre="custormer_demand_wrap" />
+          <input type="button" attr="next_button" value="Next" relate="vendor_profile_wrap" next="asin_profile_wrap" />
           <div class="splitLine"></div>
         </div>
         <div class="splitLine"></div>
@@ -69,9 +99,9 @@
     </div>
 
     <div class="session_content" id="asin_profile_wrap" style="display:none">
-      <h4 style="color:orange">ASIN Profile</h4>
+      <h4 style="color:orange" class='hide'>ASIN Profile</h4>
       <div class="input_elements">
-        <div class="input_element">
+        <div class="input_element hide">
           <%= label_tag(:slow_moving, "Slow Moving") %>
           <div class="element">
             <%= text_field_tag(:slow_moving, 1.2) %>
@@ -81,9 +111,47 @@
         </div>
         <div class="splitLine"></div>
         <div class="input_element">
-          <%= label_tag(:high_cube, "High Cube") %>
+          <%= label_tag(:high_cube, "Dimension") %>
           <div class="element">
-            <%= text_field_tag(:high_cube, "Large, HB???") %>
+            <div class="cube_size">
+              <%= label_tag(:cube_length, "Length") %>
+              <div class="cube_input">
+                <span>between</span><%= text_field_tag(:cube_length, "23", :class=>"margin_lr_5 width_35 align_center") %><span>and</span><%= text_field_tag(:cube_length_up, "44", :class=>"margin_lr_5 width_35 align_center") %><span>inches</span>
+              </div>
+            </div>
+            <div class="cube_size">
+              <%= label_tag(:cube_width, "Width") %>
+              <div class="cube_input">
+                <span>between</span><%= text_field_tag(:cube_width, "14", :class=>"margin_lr_5 width_35 align_center") %><span>and</span><%= text_field_tag(:cube_width_up, "22", :class=>"margin_lr_5 width_35 align_center") %><span>inches</span>
+              </div>
+            </div>
+            <div class="cube_size">
+              <%= label_tag(:cube_height, "Height") %>
+              <div class="cube_input">
+                <span>between</span><%= text_field_tag(:cube_height, "12", :class=>"margin_lr_5 width_35 align_center") %><span>and</span><%= text_field_tag(:cube_height_up, "21", :class=>"margin_lr_5 width_35 align_center") %><span>inches</span>
+              </div>
+            </div>
+            
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:hazmat_compatibility, "Hazmat Compatibility") %>
+          <div class="element">
+            <%= check_box_tag(:hazmat_compatibility) %>
+            <div class="mwui-switch-btn"><span _id="multiple_units_per_order" style="top:0px" change="OFF">ON</span></div>
+            <div class="mwui-switch-btn" style="display:none;"><span _id="multiple_units_per_order" style="top:0px" change="ON" class="off">OFF</span></div>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:overbox_gift_wrap, "Overbox/gift wrap") %>
+          <div class="element">
+            <%= check_box_tag(:overbox_gift_wrap) %>
+            <div class="mwui-switch-btn"><span _id="multiple_units_per_order" style="top:0px" change="OFF">ON</span></div>
+            <div class="mwui-switch-btn" style="display:none;"><span _id="multiple_units_per_order" style="top:0px" change="ON" class="off">OFF</span></div>
           </div>
           <div class="splitLine"></div>
         </div>
@@ -91,7 +159,19 @@
         <div class="input_element">
           <%= label_tag(:multibox, "Multibox") %>
           <div class="element">
-          <%= text_field_tag(:multibox, 1) %>
+          <%= check_box_tag(:multibox) %>
+          <div class="mwui-switch-btn"><span _id="multiple_units_per_order" style="top:0px" change="OFF">ON</span></div>
+            <div class="mwui-switch-btn" style="display:none;"><span _id="multiple_units_per_order" style="top:0px" change="ON" class="off">OFF</span></div>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        <div class="input_element">
+          <%= label_tag(:sioc, "SIOC") %>
+          <div class="element">
+          <%= check_box_tag(:sioc) %>
+          <div class="mwui-switch-btn"><span _id="multiple_units_per_order" style="top:0px" change="OFF">ON</span></div>
+            <div class="mwui-switch-btn" style="display:none;"><span _id="multiple_units_per_order" style="top:0px" change="ON" class="off">OFF</span></div>
           </div>
           <div class="splitLine"></div>
         </div>
@@ -99,35 +179,106 @@
         <div class="input_element">
           <%= label_tag(:high_risk_of_unhealthy_stock, "High risk of unhealthy stock") %>
           <div class="element">
-            <%= text_field_tag(:high_risk_of_unhealthy_stock, 1) %>
+            <%= check_box_tag(:high_risk_of_unhealthy_stock) %>
+            <div class="mwui-switch-btn"><span _id="multiple_units_per_order" style="top:0px" change="OFF">ON</span></div>
+            <div class="mwui-switch-btn" style="display:none;"><span _id="multiple_units_per_order" style="top:0px" change="ON" class="off">OFF</span></div>
           </div>
           <div class="splitLine"></div>
         </div>
         <div class="splitLine"></div>
-        <div class="input_element">
-          <%= label_tag(:high_customer_returns, "High Customer Returns") %>
-          <div class="element">
-            <%= text_field_tag(:high_customer_returns, "1%/Quarter") %>
-          </div>
-          <div class="splitLine"></div>
-        </div>
-        <div class="splitLine"></div>
-        <div class="input_element">
-          <%= label_tag(:high_vendor_returns, "High Vendor Returns") %>
-          <div class="element">
-            <%= text_field_tag(:high_vendor_returns, "1%/Quarter") %>
-          </div>
-          <div class="splitLine"></div>
-        </div>
+        
 
         <div class="input_element button_submit">
-          <a flag="pre" href="#">Prepage</a>
-          <input type="submit" value="Submit" relate="asin_profile_wrap" />
+          <input type="button" attr="pre_button" value="Prepage" relate="asin_profile_wrap" pre="vendor_profile_wrap" />
+          <input type="button" attr="next_button" value="Next" relate="asin_profile_wrap" next="cost_profile_wrap" />
           <div class="splitLine"></div>
         </div>
         <div class="splitLine"></div>
       </div>
     </div>
+
+    <div class="session_content" id="cost_profile_wrap" style="display:none">
+      <h4 style="color:orange" class="hide">COST Profile</h4>
+      <div class="input_elements">
+        <div class="input_element">
+          <%= label_tag(:average_list_price, "List Price") %>
+          <div class="element">
+            <span>between $</span><%= text_field_tag(:average_list_price, "133", :class=>"margin_lr_5 width_35 align_center") %><span>and $</span><%= text_field_tag(:average_list_price_up, "1666", :class=>"margin_lr_5 width_35 align_center") %><span></span>
+            <p class="help-block">Average List Price on www.amazon.com.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+
+        <div class="input_element">
+          <%= label_tag(:average_cost_of_goods, "Cost of Goods") %>
+          <div class="element">
+            <span>between $</span><%= text_field_tag(:average_cost_of_goods, "33", :class=>"margin_lr_5 width_35 align_center") %><span>and $</span><%= text_field_tag(:average_cost_of_goods_up, "678", :class=>"margin_lr_5 width_35 align_center") %><span></span>
+            <p class="help-block">Average Cost of Goods.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+
+        <div class="input_element">
+          <%= label_tag(:variability_of_cogs, "Variability of Cost of Goods") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:variability_of_cogs, "11.3", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:variability_of_cogs, "40", :class=>"margin_lr_5 width_35 align_center") %><span>%</span>
+            <p class="help-block">We measure Variability of Cost of Goods by standard deviation of Cost of Goods/average Cost of Goods.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+        
+        <div class="input_element">
+          <%= label_tag(:average_ship_charge, "Ship Charge") %>
+          <div class="element">
+            <span>between $</span><%= text_field_tag(:average_ship_charge, "1.3", :class=>"margin_lr_5 width_35 align_center") %><span>and $</span><%= text_field_tag(:average_ship_charge_up, "10", :class=>"margin_lr_5 width_35 align_center") %><span></span>
+            <p class="help-block">Average Ship Charge Per Item.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+
+        <div class="input_element">
+          <%= label_tag(:proportion_of_fcpu, "Proportion of FCPU") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:proportion_of_fcpu, "54", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:proportion_of_fcpu_up, "83.3", :class=>"margin_lr_5 width_35 align_center") %><span>%</span>
+            <p class="help-block">FCPU means fixed cost per unit.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+
+        <div class="input_element">
+          <%= label_tag(:proportion_of_vcpu, "Proportion of VCPU") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:proportion_of_vcpu, "23.3", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:proportion_of_vcpu_up, "65.2", :class=>"margin_lr_5 width_35 align_center") %><span>%</span>
+            <p class="help-block">VCPU means variable cost per unit. We measure variable cost per unit by standard deviation of cost per unit/average cost per unit.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+
+        <div class="input_element">
+          <%= label_tag(:proportion_of_tcpu, "Proportion of TCPU") %>
+          <div class="element">
+            <span>between</span><%= text_field_tag(:proportion_of_tcpu, "0.3", :class=>"margin_lr_5 width_35 align_center") %><span>% and</span><%= text_field_tag(:proportion_of_tcpu_up, "3.4", :class=>"margin_lr_5 width_35 align_center") %><span>%</span>
+            <p class="help-block">TCPU means transportation cost per unit.</p>
+          </div>
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+
+        <div class="input_element button_submit">
+          <input type="button" attr="pre_button" value="Prepage" relate="cost_profile_wrap" pre="asin_profile_wrap" />
+          <input type="submit" value="Submit" relate="cost_profile_wrap" />
+          <div class="splitLine"></div>
+        </div>
+        <div class="splitLine"></div>
+      </div>
+    </div>
+
 
     <div class="session_content"  style="display:none">
       <h4 style="color:orange">Vendor Profile</h4>

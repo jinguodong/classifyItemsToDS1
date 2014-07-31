@@ -4,6 +4,6 @@ class ApplicationController < ActionController::Base
   private
   def initial_variable
   	@remote_user = 'guodongj'
-  	@active_tab = 'metrics'
+  	@active_tab = 'asinSelection'
   end
 end

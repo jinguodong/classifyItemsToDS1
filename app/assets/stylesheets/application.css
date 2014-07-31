@@ -24,12 +24,26 @@ body {
   color: #999;
 }
 
+/* own css */
+.hide{
+	display: none;
+}
 .floatLeft{
 	float:left;
 }
 .floatRight{
 	float:right;
 }
+.bg_eee{
+	background: #EEE;
+}
+.align_center{
+	text-align: center;
+}
+.margin_lr_5{
+	margin:0px 5px;
+}
+
 
 .light{
 	color:#999

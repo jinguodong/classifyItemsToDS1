@@ -48,14 +48,49 @@ $(document).ready(function(){
 		relate_content = $(this).attr("relate");
 		session_contents = $(".session_content").hide();
 		session_content = $(".session_content[id="+relate_content+"]")
+		$("a[flag='nav']").attr('class', '');
+		$(this).attr('class', 'bg_eee');
 		session_content.show();
 	});
 
-	$("input[type='button']").click(function(){
+	$("input[attr='next_button']").click(function(){
 		relate = $(this).attr("relate");
 		next = $(this).attr("next");
 		$("#"+relate).hide();
+		$("a[relate="+relate+"]").attr('class', '');
 		$("#"+next).show();
+		$("a[relate="+next+"]").attr('class', 'bg_eee');
 		return 0;
 	});
+	$("input[attr='pre_button']").click(function(){
+		relate = $(this).attr("relate");
+		pre = $(this).attr("pre");
+		$("#"+relate).hide();
+		$("a[relate="+relate+"]").attr('class', '');
+		$("#"+pre).show();
+		$("a[relate="+pre+"]").attr('class', 'bg_eee');
+		return 0;
+	});
+	$(".item").click(function(){
+		_href = $(this);
+		_href = $(this.firstChild.nextSibling.getElementsByTagName('a')).attr('href');
+		if(_href){
+			window.location.href=_href;
+		}
+	});
+
+	$(".mwui-switch-btn span[change='OFF']").click(function(){
+		_this = $(this)
+		_this.parent().prev().val(1);
+		_this.parent().next().show();
+		_this.parent().hide();
+	});
+	$(".mwui-switch-btn span[change='ON']").click(function(){
+		_this = $(this)
+		_this.parent().prev().prev().val(0);
+		_this.parent().prev().show();
+		_this.parent().hide();
+	});
+	
 });
+

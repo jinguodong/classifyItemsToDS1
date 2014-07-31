@@ -1,50 +1,411 @@
 <div class='recommend' id='recommend'>
-  <h2>Recommended item to DropShip</h2>
+  <h2 class="floatLeft"><%= @reced_asin %></h2>
+  <%= link_to "Compare with similar items already in #{@local_params['fulfil_name']}", {:controller => "recommend", :action => "sub_show_rec", :id=>@hash_input, :local_params=>@local_params}, :class=>"title_link" %>
+  <div class="splitLine"></div>
   <div class="itemsContainer">
-      <div class="item">
-        <div class="itemInner">
-          <div class="productImage">
-            <img src=<%= @reced_img_url %> />
-          </div>
-          <div class="name"><%= @reced_name %></div>
-          <div class="price">
-            <!-- <span class="listPrice">$41.99</span> -->
-            <span class="ourPrice">Price: $<%= @reced_cogs %></span>
-          </div>
-          <div class="weight">
-            <span class="weightAll">Weight: <%= @reced_weight %></span>
-          </div>
+    <div class="item no_href">
+      <div class="itemInner">
+        <div class="productImage">
+          <img src=<%= @reced_img_url %> />
+        </div>
+        <div class="name"><%= @reced_name %></div>
+        <div class="price">
+          <!-- <span class="listPrice">$41.99</span> -->
+          <span class="ourPrice">Price: $<%= @reced_cogs %></span>
+        </div>
+        <div class="weight">
+          <span class="weightAll">Weight: <%= @reced_weight %></span>
         </div>
       </div>
-  <div class="splitLine"></div>
-  </div>
-  <h2>Reason for recommendation</h2>
-  <div class="note"><p class="note_content"><b>Note:</b>"Reason for recommendation" is for showing you How did we recommend the item above to you. "Reason for recommendation" contains 5 items that belong to DropShip and are in the same cluster of the item recommended. The reason items chosed by selecting the most closest to the center of the cluster. So you may say that many recommended items may have same reason items. Click "Compare to this?" to see the comparation between the recommended item and the reason item you choose.</p></div>
-  <div class="itemsContainer">
-    <% @reced_reason_ds_res_items_all.each do |item| %>
-      <% v = item %>
-      <div class="item"> 
-        <div class="itemInner">
-          <div class="productImage">
-            <img src=<%= v['img_url'] %> />
+    </div>
+    <div class="item_attrs">
+      <div class="item_attr">
+        <h4 style="color:orange">Customer Demand</h4>
+        <div class="attrs">
+          <div class="attr">
+            <span class="attr_name">Multiple Units per shipment</span><span class="attr_value"><%= @physical_attrs["shipment_ratio"] %></span>  
           </div>
-          <div class="name"><%= v['name'] %></div>
-          <div class="price">
-            <!-- <span class="listPrice">$41.99</span> -->
-            <span class="ourPrice">Price: $<%= v['cogs'] %></span>
-          </div>
-          <div class="weight">
-            <span class="weightAll">Weight: <%= v['weight'] %></span>
-          </div>
-          <div class="reason">
-            <%= link_to "Compare with this?", :controller => "recommend", :action => "compare", :id => {:ds => v['asin'], :other => @reced_asin} %>
+          <div class="attr">
+            <span class="attr_name">Multiple Units Per Order</span><span class="attr_value"><%= @physical_attrs["multiple_units_per_order"] %></span>
           </div>
         </div>
+
       </div>
-      <% #break %>
-    <% end %>
-    
-  <div class="splitLine"></div>
+    </div>
+
+    <div class="item_attrs">
+      <div class="item_attr">
+        <h4 style="color:orange">Vendor Profile</h4>
+        <div class="attrs">
+          <div class="attr">
+            <span class="attr_name">weekly volume</span><span class="attr_value"><%= @physical_attrs["low_weekly_volumes"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">Variability of demand</span><span class="attr_value"><%= @physical_attrs["high_variability_of_demand_weekly"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">Peakiness</span><span class="attr_value"><%= @physical_attrs["high_peakiness"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">Customer returns</span><span class="attr_value"><%= @physical_attrs["high_customer_returns"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Vendor returns</span><span class="attr_value"><%= @physical_attrs["high_vendor_returns"] %></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="item_attrs">
+      <div class="item_attr">
+        <h4 style="color:orange">ASIN Profile</h4>
+        <div class="attrs">
+          <div class="attr">
+            <span class="attr_name">Length</span><span class="attr_value"><%= @physical_attrs["cube_length"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Width</span><span class="attr_value"><%= @physical_attrs["cube_width"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">Height</span><span class="attr_value"><%= @physical_attrs["cube_height"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Hazmat Compatibility</span><span class="attr_value"><%= @physical_attrs["hazmat_compatibility"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">Overbox/gift wrap</span><span class="attr_value"><%= @physical_attrs["overbox_gift_wrap"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Multibox</span><span class="attr_value"><%= @physical_attrs["multibox"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">SIOC</span><span class="attr_value"><%= @physical_attrs["sioc"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">High risk of unhealthy stock</span><span class="attr_value"><%= @physical_attrs["high_risk_of_unhealthy_stock"] %></span>  
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+
+    <div class="item_attrs">
+      <div class="item_attr">
+        <h4 style="color:orange">Cost Profile</h4>
+        <div class="attrs">
+          <div class="attr">
+            <span class="attr_name">List Price</span><span class="attr_value"><%= @physical_attrs["average_list_price"] %></span>  
+          </div>
+          <div class="attr">
+            <span class="attr_name">Cost of Goods</span><span class="attr_value"><%= @physical_attrs["average_cost_of_goods"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Variability of Cost of Goods</span><span class="attr_value"><%= @physical_attrs["average_cost_of_goods"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Ship Charge</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Proportion of FCPU</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Proportion of VCPU</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
+          </div>
+          <div class="attr">
+            <span class="attr_name">Proportion of TCPU</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="splitLine"></div>
   </div>
 
+  <div class="item_graphs">
+    <div class="item_graph">
+      <h4 style="color:orange">Customer Demand Profile</h4>
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the shipment ratio weekly of the ASIN.</p></div>
+      <div id='shipment_ratio_graph_per_week' class="display_show info_graph">
+      </div>
+    </div>
+
+    <div class="item_graph">
+      <h4 style="color:orange">Vendor Profile</h4>
+      
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the weekly volumes.</p></div>
+      <div id='low_weekly_volumes' class="display_show info_graph">
+      </div>
+
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you high peakiness reason.</p></div>
+      <div id='high_peakiness' class="display_show info_graph">
+      </div>
+
+    </div>
+
+    <div class="item_graph">
+      <h4 style="color:orange">ASIN Profile</h4>
+      
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the customer returns weekly.</p></div>
+      <div id='high_customer_returns' class="display_show info_graph">
+      </div>
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the vendor returns weekly.</p></div>
+      <div id='high_vendor_returns' class="display_show info_graph">
+      </div>
+      
+    </div>
+
+    <div class="item_graph">
+      <h4 style="color:orange">COST Profile</h4>
+      
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the List Price on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div id='list_price' class="display_show info_graph">
+      </div>
+
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Cost of Goods from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div id='cost_of_goods' class="display_show info_graph">
+      </div>
+
+      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the ship charge from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div id='ship_charge' class="display_show info_graph">
+      </div>
+      
+    </div>
+
+  </div>
+
+  <div class="splitLine"></div>
+
 </div>
+
+<script>
+  function draw_graph(_id, _type, _title, _subtitle, _series_name, _data) {
+    $("#"+_id).highcharts({
+        chart: {
+            type: _type
+        },
+        title: {
+            text: _title
+        },
+        subtitle: {
+            text: _subtitle
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'List Pirce ($)'
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return 'List Price' +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: _series_name,
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: _data
+        }]
+    });
+  }
+
+  function draw_weekly_graph(_id, _type, _title, _subtitle, _ytitle, _vname, _data, _compare_data_down=1.13, _compare_data_up=1.87){
+      _compare_arr_down = []
+      _compare_arr_up = []
+      for(var a in _data){
+        _compare_arr_down.push(_compare_data_down)
+        _compare_arr_up.push(_compare_data_up)
+      }
+      $("#"+_id).highcharts({
+          chart: {
+              type: _type
+          },
+          title: {
+              text: _title
+          },
+          subtitle: {
+              text: _subtitle
+          },
+          xAxis: {
+              categories: [
+                  9,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15,
+                  16,
+                  17,
+                  18,
+                  19,
+                  20,
+                  21,
+                  22,
+                  23,
+                  24,
+                  25,
+                  26,
+                  27,
+              ]
+          },
+          yAxis: {
+              title: {
+                  text: _ytitle
+              }
+          },
+          tooltip: {
+              headerFormat: '<span style="color:{series.color}">{series.name}: </span><span>{point.key}</span><table>',
+              pointFormat: '<tr><td style="color:{series.color};padding:0">'+_vname+': </td>' +
+                  '<td style="padding:0"><b>{point.y} </b></td></tr>',
+              footerFormat: '</table>',
+              shared: true,
+              useHTML: true
+          },
+          plotOptions: {
+              column: {
+                  pointPadding: 0.2,
+                  borderWidth: 0
+              }
+          },
+          series: [{
+              name: 'Week',
+              data: _data
+          },{name: 'Down threshold', data: _compare_arr_down},
+          {name: 'Up threshold', data: _compare_arr_up}]
+      });
+  }
+
+  function draw_pie(_id, _type, _title, _data){
+    $("#"+_id).highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+        },
+        title: {
+            text: _title
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    formatter: function() {
+                        return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                    }
+                }
+            }
+        },
+        series: [{
+            type: _type,
+            name: 'Browser share',
+            data: _data
+        }]
+    });
+  }
+
+  function draw_time_point(_id, _type, _title, _subtitle, _ytitle, _data, _compare_data_down=1.13, _compare_data_up=1.87){
+    _compare_arr_down = []
+    _compare_arr_up = []
+    for(var a in _data){
+      _compare_arr_down.push([_data[a][0], _compare_data_down])
+      _compare_arr_up.push([_data[a][0], _compare_data_up])
+    }
+    // alert(_compare_arr_down);
+    $('#'+_id).highcharts({
+        chart: {
+            type: _type
+        },
+        title: {
+            text: _title
+        },
+        subtitle: {
+            text: _subtitle
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                month: '%e of %b',
+                year: '%Y'
+            }
+        },
+        yAxis: {
+            title: {
+                text: _ytitle
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                    return _ytitle +': '+ this.y +' $';
+            }
+        },
+        
+        series: [{
+            name: _ytitle + "of ASIN(<%= @item['asin'] %>)",
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: _data
+        }, {
+            name: 'Down threshold',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: _compare_arr_down
+        }, {
+            name: 'Up threshold',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: _compare_arr_up
+        }]
+    });
+  }
+
+$(document).ready(function(){
+  draw_weekly_graph('shipment_ratio_graph_per_week', 'spline', 'Shipment Ratio', 'AVG: '+<%= @shipment_ratio_math[2] %>+' Variability: '+<%= @shipment_ratio_math[3] %>+' Coefficient of Variation: '+<%= @shipment_ratio_math[4] %>, "Shipment Ratio", "Ratio", [<% (9..27).each do |i| %><%= @shipment_ratio_graph_per_week[i] %>,<% end %>], <%= @shipment_ratio_math[2].to_f - @shipment_ratio_math[2].to_f*0.1 %>, <%= @shipment_ratio_math[2].to_f + @shipment_ratio_math[2].to_f*0.1 %>);
+
+  draw_weekly_graph('low_weekly_volumes', 'spline', 'Weekly Volumes', 'AVG: '+<%= @low_weekly_volumes_math[2] %>+' Variability: '+<%= @low_weekly_volumes_math[3] %>+' Coefficient of Variation: '+<%= @low_weekly_volumes_math[4] %>, "Weekly Volumes", "Weekly Volumes",  [<% (9..27).each do |i| %><%= @low_weekly_volumes[i] %>,<% end %>], <%= @low_weekly_volumes_math[2].to_f - @low_weekly_volumes_math[2].to_f*0.1 %>, <%= @low_weekly_volumes_math[2].to_f + @low_weekly_volumes_math[2].to_f*0.1 %>);
+
+  draw_pie('high_peakiness', 'pie', 'High Peakiness', [['others', <%= "#{@high_peakiness[1]}" %>],{name:'High Peakiness', y:<%= "#{@high_peakiness[0]}" %>, sliced:true, selected:true}]);
+  
+  draw_weekly_graph('high_customer_returns', 'spline', 'Weekly Customer Returns', 'AVG: '+<%= @high_customer_returns_math[2] %>+' Variability: '+<%= @high_customer_returns_math[3] %>+' Coefficient of Variation: '+<%= @high_customer_returns_math[4] %>, "Weekly Customer Returns", "Weekly Customer Returns", [<% (9..27).each do |i| %><%= @high_customer_returns[i] %>,<% end %>], <%= @high_customer_returns_math[2].to_f - @high_customer_returns_math[2].to_f*0.1 %>, <%= @high_customer_returns_math[2].to_f + @high_customer_returns_math[2].to_f*0.1 %>);
+  
+  draw_weekly_graph('high_vendor_returns', 'spline', 'Weekly Vendor Returns', 'AVG: '+<%= @high_vendor_returns_math[2] %>+' Variability: '+<%= @high_vendor_returns_math[3] %>+' Coefficient of Variation: '+<%= @high_vendor_returns_math[4] %>, "Weekly Vendor Returns", "Weekly Vendor Returns", [<% (9..27).each do |i| %><%= @high_vendor_returns[i] %>,<% end %>], <%= @high_vendor_returns_math[2].to_f - @high_vendor_returns_math[2].to_f*0.1 %>, <%= @high_vendor_returns_math[2].to_f + @high_vendor_returns_math[2].to_f*0.1 %>);
+  
+  draw_time_point('list_price', 'spline', 'List Price', 'AVG: '+<%= @date_list_price_math[2] %>+' Variability: '+<%= @date_list_price_math[3] %>+' Coefficient of Variation: '+<%= @date_list_price_math[4] %>, "List Price", [
+    <% @date_list_price.each do |item| %>
+      [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+    <% end %>], <%= @date_list_price_math[2].to_f - @date_list_price_math[2].to_f*0.1 %>, <%= @date_list_price_math[2].to_f + @date_list_price_math[2].to_f*0.1 %>);
+  
+  draw_time_point('cost_of_goods', 'spline', 'Cost of Goods', 'AVG: '+<%= @date_cogs_math[2] %>+' Variability: '+<%= @date_cogs_math[3] %>+' Coefficient of Variation: '+<%= @date_cogs_math[4] %>, "Cost of Goods", [
+    <% @date_cogs.each do |item| %>
+      [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+    <% end %>], <%= @date_cogs_math[2].to_f - @date_cogs_math[2].to_f*0.1 %>, <%= @date_cogs_math[2].to_f + @date_cogs_math[2].to_f*0.1 %>);
+
+  draw_time_point('ship_charge', 'spline', 'Ship Charge', 'AVG: '+<%= @date_ship_charge_math[2] %>+' Variability: '+<%= @date_ship_charge_math[3] %>+' Coefficient of Variation: '+<%= @date_ship_charge_math[4] %>, "Ship Charge", [
+    <% @date_ship_charge.each do |item| %>
+      [Date.UTC(<%= item[0] %>, <%= item[1] %>, <%= item[2] %>), <%= item[3] %>],
+    <% end %>], <%= @date_ship_charge_math[2].to_f - @date_ship_charge_math[2].to_f*0.1 %>, <%= @date_ship_charge_math[2].to_f + @date_ship_charge_math[2].to_f*0.1 %>);
+  
+  
+  
+});
+
+</script>
