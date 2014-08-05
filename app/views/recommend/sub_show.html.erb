@@ -1,6 +1,6 @@
 <div class='recommend' id='recommend'>
   <h2 class="floatLeft"><%= @reced_asin %></h2>
-  <%= link_to "Compare with similar items already in #{@local_params['fulfil_name']}", {:controller => "recommend", :action => "sub_show_rec", :id=>@hash_input, :local_params=>@local_params}, :class=>"title_link" %>
+  <%= link_to "Compare with similar items already in #{@local_params['fulfil_name']}", {:controller => "recommend", :action => "sub_show_rec", :id=>@hash_input, :local_params=>@local_params}, :class=>"title_link btn btn-mini" %>
   <div class="splitLine"></div>
   <div class="itemsContainer">
     <div class="item no_href">
