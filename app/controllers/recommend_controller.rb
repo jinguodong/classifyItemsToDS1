@@ -143,6 +143,68 @@ class RecommendController < ApplicationController
 	end
 
 	def show
+		items_per_page = 15
+		@id = params['id'].to_i
+		@pre_id = @id - 5
+
+		@bottom_id = @id - 4 >= 0 ? @id - 4 : 0;
+		@top_id = @bottom_id + 8;
+		@pre_flag = 0
+		@next_flag = 0
+		if @pre_id >= 2
+			@pre_id = 1
+			@pre_flag = 1
+		end
+		@next_id = @id + 5
+		
+		_start = @id * items_per_page
+		_end = _start + items_per_page
+		
+		@filtered_res = filter_asins()
+		p @filtered_res.size()
+
+		@rec_items_all = []
+		@filtered_res.each do |item|
+			_item_asin = item['asin']
+			rec_item_all = get_info_by_asin(_item_asin)
+			if rec_item_all == nil
+				next
+			end
+			exp_res = CftdExperimentsItemsResult.where('ASIN = ?', _item_asin)[0]
+			rec_item_all['class_id'] = exp_res['CLASS_ID']
+			rec_item_all['exp_id'] = exp_res['EXPERIMENT_ID']
+
+			_tem_item = Marshal.load(Marshal.dump(rec_item_all))
+			@rec_items_all << _tem_item
+			# puts rec_items_asin_str
+			# puts "#{@rec_items_all}"
+		end
+
+		# write_to_txt_file(@rec_items_all, "items_reced.txt")
+
+		@rec_items_final = []
+		@page_cnt = (@rec_items_all.size()+items_per_page-1)/items_per_page
+		puts "all len #{@rec_items_all.size()} : id :#{_start} : #{_end}"
+		
+		for i in (_start..._end)
+			if i < @rec_items_all.size()
+				@rec_items_final << Marshal.load(Marshal.dump(@rec_items_all[i]))
+			end
+		end
+		if @next_id <= @page_cnt-3
+			@next_id = @page_cnt-2
+			@next_flag = 1
+		end
+		if @top_id > @page_cnt-1
+			@top_id = @page_cnt-1
+			if @top_id - 8 >= 0
+				@bottom_id = @top_id - 8
+			end
+		end
+	end
+
+	def show_rec
+		# show_rec, come from Version1.0, for backup
 
 		items_per_page = 15
 		@id = params['id'].to_i
@@ -289,8 +351,6 @@ class RecommendController < ApplicationController
 		@date_ship_charge_math = cal_daily_math(@date_ship_charge)
 		@date_cogs = get_need_info(@shipments, 'cogs')
 		@date_cogs_math = cal_daily_math(@date_cogs)
-
-
 	end
 
 	def sub_show_rec
@@ -347,6 +407,9 @@ class RecommendController < ApplicationController
 		end
 		ds_asin = hash_input['ds']
 		other_asin = hash_input['other']
+
+		@ds_physical_attrs = get_physical_attrs(ds_asin)
+		@other_physical_attrs = get_physical_attrs(other_asin)
 
 		@ds_item = get_info_by_asin(ds_asin)
 		@other_item = get_info_by_asin(other_asin)
@@ -416,29 +479,152 @@ class RecommendController < ApplicationController
 
 		@other_high_vendor_returns = get_vendor_returns(other_asin)
 		@other_high_vendor_returns_math = cal_math(@other_high_vendor_returns)
-
 	end
-
 	def certificate
 		@result = params
 		@factors = ["list_price", "our_price", "ship_charge", "velocity_week", "cost_of_goods"]
 	end
-
 	def deal
 		# @result = params
+
 		redirect_to :action => "show", :id => 0, :local_params=>params
 	end
 
 	protected
+
+	def filter_asins
+		# Filter asins by @local_params and asin_attributes.
+
+		# Attributes can be gotten from @bound_seq and @check_seq.
+		limit_cnt = 1000
+
+		where_query = ""
+		@bound_seq.each do |bound|
+			p "bound"
+			p bound
+			if bound[0] == '_split_ele'
+				next
+			end
+			where_query = where_query + bound[3] + ">= #{@local_params[bound[0]]}"
+			where_query = where_query + " and "
+			where_query = where_query + bound[3] + "<= #{@local_params[bound[0]+"_up"]}"
+			where_query = where_query + " and "
+		end
+
+		where_query = where_query + " 1 "
+		
+		@check_seq.each do |check|
+			where_query = where_query + " and "
+			if check[0] == 'hazmat_compatibility'
+				where_query = where_query + check[1]
+				if @local_params[check[0]] == '1'
+					where_query = where_query + "!= '#{check[2]}'"
+				else
+					where_query = where_query + "= '#{check[2]}'"
+				end
+			else
+				where_query = where_query + check[1]
+				if @local_params[check[0]] == '1'
+					where_query = where_query + "= '#{check[2]}'"
+				else
+					where_query = where_query + "!= '#{check[2]}'"
+				end
+			end
+			
+		end
+
+		where_query = where_query + " and dropship = 0 "
+
+		p where_query
+
+		filter_res = AsinAttribute.where(where_query).limit(limit_cnt)
+		return filter_res
+	end
+
 	def get_params
 		@local_params = params['local_params']
+		@settings_map = {}
+		
+		@bound_seq = []
+		@bound_seq << ['shipment_ratio', '', ' units', 'shipment_ratio']
+		@bound_seq << ['multiple_units_per_order', '', ' units', 'multiple_units_per_order']
+		@bound_seq << ['low_weekly_volumes', '', ' units', 'weekly_volumes']
+		@bound_seq << ['high_variability_of_demand_weekly', '', '%', 'variability_of_demand_weekly']
+		@bound_seq << ['high_peakiness', '', '%', 'peakiness']
+		# @bound_seq << ['high_customer_returns', '', '%']
+		# @bound_seq << ['high_vendor_returns', '', '%']
+		@bound_seq << ['cube_length', '', ' inches', 'cube_length']
+		@bound_seq << ['cube_width', '', ' inches', 'cube_width']
+		@bound_seq << ['cube_height', '', ' inches', 'cube_height']
+		@bound_seq << ['_split_ele', '', '']
+		@bound_seq << ['average_list_price', '$', '', 'average_list_price']
+		@bound_seq << ['average_cost_of_goods', '$', '', 'average_cost_of_goods']
+		@bound_seq << ['variability_of_cogs', '', '%', 'variability_of_cogs']
+		@bound_seq << ['average_ship_charge', '$', '', 'average_ship_charge']
+		# @bound_seq << ['proportion_of_fcpu', '', '%']
+		# @bound_seq << ['proportion_of_vcpu', '', '%']
+		# @bound_seq << ['proportion_of_tcpu', '', '%']
+
+		@check_seq = []
+		@check_seq << ['hazmat_compatibility', 'hazmat_compatibility', '']
+		@check_seq << ['overbox_gift_wrap', 'is_giftwrappable', 'Y']
+		@check_seq << ['multibox', 'product_tier_id', 'M']
+		@check_seq << ['sioc', 'sioc', 'Y']
+		# @check_seq << 'high_risk_of_unhealthy_stock'
+
+		@settings_map['shipment_ratio'] = 'Shipment Ratio'
+		@settings_map['shipment_ratio_up'] = 'Shipment Ratio Upper Bound'
+		@settings_map['multiple_units_per_order'] = 'Multiple Units per Order'
+		@settings_map['multiple_units_per_order_up'] = 'Multiple Units per Order Upper Bound'
+
+		@settings_map['low_weekly_volumes'] = 'Weekly Volume'
+		@settings_map['low_weekly_volumes_up'] = 'Weekly Volume Upper Bound'
+		@settings_map['high_variability_of_demand_weekly'] = 'Variability of Demand'
+		@settings_map['high_variability_of_demand_weekly_up'] = 'Variability of Demand Upper Bound'
+		@settings_map['high_peakiness'] = 'Peakiness'
+		@settings_map['high_peakiness_up'] = 'Peakiness Upper Bound'
+		@settings_map['high_customer_returns'] = 'Customer Returns'
+		@settings_map['high_customer_returns_up'] = 'Customer Returns Upper Bound'
+		@settings_map['high_vendor_returns'] = 'Vendor Returns'
+		@settings_map['high_vendor_returns_up'] = 'Vendor Returns Upper Bound'
+
+		@settings_map['cube_length'] = "Length"
+		@settings_map['cube_length_up'] = 'Length Upper Bound'
+		@settings_map['cube_width'] = 'Width'
+		@settings_map['cube_width_up'] = 'Width Upper Bound'
+		@settings_map['cube_height'] = 'Height'
+		@settings_map['cube_height_up'] = 'Height Upper Bound'
+		@settings_map['hazmat_compatibility'] = 'Hazmat Compatibility'
+		@settings_map['overbox_gift_wrap'] = 'Overbox/gift wrap'
+		@settings_map['multibox'] = 'Multibox'
+		@settings_map['sioc'] = 'SIOC'
+		@settings_map['high_risk_of_unhealthy_stock'] = 'High Risk of Unhealthy Stock'
+
+		@settings_map['average_list_price'] = 'List Price'
+		@settings_map['average_list_price_up'] = 'List Price Upper Bound'
+		@settings_map['average_cost_of_goods'] = 'Cost of Goods'
+		@settings_map['average_cost_of_goods_up'] = 'Cost of Goods Upper Bound'
+		@settings_map['variability_of_cogs'] = 'Variability of Cost of Goods'
+		@settings_map['variability_of_cogs_up'] = 'Variability of Cost of Goods Upper Bound'
+		@settings_map['average_ship_charge'] = 'Ship Charge'
+		@settings_map['average_ship_charge_up'] = 'Ship Charge Upper Bound'
+		@settings_map['proportion_of_fcpu_up'] = 'Proportion of FCPU Upper Bound'
+		@settings_map['proportion_of_fcpu'] = 'Proportion of FCPU'
+		@settings_map['proportion_of_vcpu'] = 'Proportion of VCPU'
+		@settings_map['proportion_of_vcpu_up'] = 'Proportion of VCPU Upper Bound'
+		@settings_map['proportion_of_tcpu'] = 'Proportion of TCPU'
+		@settings_map['proportion_of_tcpu_up'] = 'Proportion of TCPU Upper Bound'
 	end
 	def cal_math(num_hash)
 		_max = cal_max(num_hash)
 		_min = cal_min(num_hash)
 		_avg = cal_avg(num_hash)
 		_dev = cal_dev(num_hash)
-		_coe = _dev/_avg
+		if (_avg) < 0.0001
+			_coe = 0.0
+		else
+			_coe = _dev/_avg
+		end
 		
 		_avg = format("%0.3f", _avg)
 		_dev = format("%0.3f", _dev)
@@ -468,15 +654,21 @@ class RecommendController < ApplicationController
 		return _dev
 	end
 	def cal_max(num_hash)
+		return num_hash.values.max
 	end
 	def cal_min(num_hash)
+		return num_hash.values.min
 	end
 	def cal_daily_math(num_arr)
 		_max = 0
 		_min = 0
 		_avg = cal_daily_avg(num_arr)
 		_dev = cal_daily_dev(num_arr)
-		_coe = _dev/_avg
+		if (_avg) < 0.0001
+			_coe = 0.0
+		else
+			_coe = _dev/_avg
+		end
 		
 		_avg = format("%0.3f", _avg)
 		_dev = format("%0.3f", _dev)
@@ -508,33 +700,107 @@ class RecommendController < ApplicationController
 
 	def get_physical_attrs(asin)
 		_attrs = {}
-		_attrs['shipment_ratio'] = "1.1"
-		_attrs['multiple_units_per_order'] = "1"
-		_attrs['low_weekly_volumes'] = "3"
-		_attrs['high_variability_of_demand_weekly'] = "10"
-		_attrs['high_peakiness'] = "1"
-		_attrs['cube_length'] = "12"
-		_attrs['cube_width'] = "11"
-		_attrs['cube_height'] = "9"
-		_attrs['hazmat_compatibility'] = "1"
-		_attrs['overbox_gift_wrap'] = "1"
-		_attrs['multibox'] = "1"
-		_attrs['sioc'] = "1"
-		_attrs['high_risk_of_unhealthy_stock'] = "1"
-		_attrs['high_customer_returns'] = "0.19"
-		_attrs['high_vendor_returns'] = "0.12"
-		_attrs['average_list_price'] = "110"
-		_attrs['average_cost_of_goods'] = "90"
-		_attrs['average_ship_charge'] = "3.2"
+
+		asin_attribute = AsinAttribute.where("asin = ?", asin)[0]
+
+		puts "asin attributes"
+		p asin_attribute['shipment_ratio']
+		_attrs['shipment_ratio'] = "#{asin_attribute['shipment_ratio']}"
+		_attrs['multiple_units_per_order'] = "#{asin_attribute['multiple_units_per_order']}"
+
+		_attrs['low_weekly_volumes'] = "#{asin_attribute['weekly_volumes']}"
+		_attrs['high_variability_of_demand_weekly'] = "#{asin_attribute['variability_of_demand_weekly']}"
+
+		_attrs['high_peakiness'] = "#{asin_attribute['peakiness']}"
+		_attrs['cube_length'] = "#{asin_attribute['cube_length']}"
+		_attrs['cube_width'] = "#{asin_attribute['cube_width']}"
+		_attrs['cube_height'] = "#{asin_attribute['cube_height']}"
+
+		_attrs['hazmat_compatibility'] = "#{asin_attribute['hazmat_compatibility']=='' || asin_attribute['hazmat_compatibility']=='unknown' ? '0' : '1'}"
+		_attrs['overbox_gift_wrap'] = "#{asin_attribute['is_giftwrappable']=='Y' ? '1' : '0'}"
+		_attrs['multibox'] = "#{asin_attribute['product_tier_id']=='M' ? '1' : '0'}"
+		_attrs['sioc'] = "#{asin_attribute['sioc']=='Y' ? '1' : '0'}"
+		
+		# _attrs['high_risk_of_unhealthy_stock'] = "1"
+		# _attrs['high_customer_returns'] = "0.19"
+		# _attrs['high_vendor_returns'] = "0.12"
+
+		_attrs['average_list_price'] = "#{asin_attribute['average_list_price']}"
+		_attrs['average_cost_of_goods'] = "#{asin_attribute['average_cost_of_goods']}"
+		_attrs['variability_of_cogs'] = "#{asin_attribute['variability_of_cogs']}"
+		_attrs['average_ship_charge'] = "#{asin_attribute['average_ship_charge']}"
+		# _attrs['proportion_of_fcpu'] = "0.13"
+		# _attrs['proportion_of_vcpu'] = "0.13"
+		# _attrs['proportion_of_tcpu'] = "0.13"
+		return _attrs
+	end
+
+	def get_physical_attrs_backup(asin)
+		# From version1.0, for backup.
+
+		# At the latest version, this function is not used.
+		_attrs = {}
+
+		asin_physical = AsinPhysical.where("asin = ?", asin)[0]
+		p asin_physical
+		d_custormer_shipment_item = DCustormerShipmentItem.where("asin = ?", asin)[0]
+		p d_custormer_shipment_item
+		asin_attribute = AsinAttribute.where("asin = ?", asin)[0]
+		p asin_attribute
+		asin_tier_id = AsinTierId.where("asin = ?", asin)[0]
+		p asin_tier_id
+		asin_peak = AsinYearPeak.where("asin = ?", asin)[0]
+		p asin_peak
+
+		puts "asin attributes"
+		p asin_attribute['shipment_ratio']
+		_attrs['shipment_ratio'] = "#{asin_attribute['shipment_ratio']}"
+		_attrs['multiple_units_per_order'] = "#{asin_attribute['multiple_units_per_order']}"
+
+		_attrs['low_weekly_volumes'] = "#{asin_attribute['weekly_volumes']}"
+		_attrs['high_variability_of_demand_weekly'] = "#{asin_attribute['variability_of_demand_weekly']}"
+
+		_attrs['high_peakiness'] = "#{asin_peak['peakness']}"
+		_attrs['cube_length'] = "#{asin_physical['pkg_length']}"
+		_attrs['cube_width'] = "#{asin_physical['pkg_width']}"
+		_attrs['cube_height'] = "#{asin_physical['pkg_height']}"
+
+		_attrs['hazmat_compatibility'] = "#{asin_physical['hazmat_type']=='' || asin_physical['hazmat_type']=='unknown' ? '0' : '1'}"
+		_attrs['overbox_gift_wrap'] = "#{asin_physical['is_giftwrappable']=='Y' ? '1' : '0'}"
+		_attrs['multibox'] = "#{asin_tier_id['product_tier_id']=='M' ? '1' : '0'}"
+		_attrs['sioc'] = "#{asin_physical['can_ship_in_original_container']=='Y' ? '1' : '0'}"
+		
+		# _attrs['high_risk_of_unhealthy_stock'] = "1"
+		# _attrs['high_customer_returns'] = "0.19"
+		# _attrs['high_vendor_returns'] = "0.12"
+
+		_attrs['average_list_price'] = "#{d_custormer_shipment_item['AVG_OUR_PRICE']}"
+		_attrs['average_cost_of_goods'] = "#{d_custormer_shipment_item['AVG_ITEM_FIFO_COST']}"
+		_attrs['variability_of_cogs'] = "#{(d_custormer_shipment_item['STDDEV_ITEM_FIFO_COST']/d_custormer_shipment_item['AVG_ITEM_FIFO_COST']).round(3)}"
+		_attrs['average_ship_charge'] = "#{d_custormer_shipment_item['AVG_PER_ITEM_SHIP_CHARGE']}"
+		# _attrs['proportion_of_fcpu'] = "0.13"
+		# _attrs['proportion_of_vcpu'] = "0.13"
+		# _attrs['proportion_of_tcpu'] = "0.13"
 		return _attrs
 	end
 
 	def get_weekly_shipment_ratio(asin)
 		_res = get_rand_hash((9..27))
+		ratio_res = AllAsinCostShipPrice.select("asin, week, sum(quantity)/count(shipment_id) as ratio").where("asin = ?", asin).group('week').all
+		p ratio_res
+		_res.each.each do |k, v|
+			_res[k] = 0.0
+		end
+		ratio_res.each do |ratio|
+			_res[ratio['week'].to_i] = ratio['ratio'].to_f
+		end
+		p _res
 		return _res
 	end
 	def get_weekly_volumes(asin)
+		# do not  be used
 		_res = get_rand_hash((9..27))
+
 		return _res
 	end
 	def get_high_peakiness(asin)
@@ -542,6 +808,8 @@ class RecommendController < ApplicationController
 		_peakiness = _peakiness.to_i
 		_peakiness_other = 1000-_peakiness
 		_res = [_peakiness/1000.0, _peakiness_other/1000.0]
+		_res  = AsinAttribute.where("asin=?", asin)[0]['peakiness']
+		_res = [_res, 100-_res]
 		return _res
 	end
 	def get_customer_returns(asin)
@@ -578,7 +846,7 @@ class RecommendController < ApplicationController
 		# => Get infos: name, cogs, velocity, weight, img_url', asin.
 		reced_item_all = {}
 		_item_asin = asin
-		_item_name_res = AsinName.where( ["ASIN = ?", _item_asin] ).first
+		_item_name_res = AllAsinName.where( ["ASIN = ?", _item_asin] ).first
 		if _item_name_res == nil
 			return nil
 		end
@@ -608,7 +876,7 @@ class RecommendController < ApplicationController
 		# => asin, ship_day, list_price, our_price, ship_charge, cogs, velocity
 		shipments = []
 		_item_asin = asin
-		_item_name_res = AsinCostShipPrice.where( ["ASIN = ?", _item_asin] ).order("ship_day").all
+		_item_name_res = AllAsinCostShipPrice.where( ["ASIN = ?", _item_asin] ).order("ship_day").all
 		if _item_name_res == nil
 			return nil
 		end
@@ -629,14 +897,14 @@ class RecommendController < ApplicationController
 	end
 
 	def get_history_of_quantity_by_asin(asin)
-		# From table: AsinCostShipPrice and Get history of quantity infos of the input ASIN.
+		# From table: AllAsinCostShipPrice and Get history of quantity infos of the input ASIN.
 
 		# Result: shipment_quantities = []
 		# => Each element in shpments is consist of : 
 		# => asin, week, sum_q(sum(quantity)/week)
 		shipment_quantities = []
 		_item_asin = asin
-		_item_quantity_res = AsinCostShipPrice.select("asin, week, SUM(quantity) as sum_q").where( ["ASIN = ?", _item_asin] ).group("week").order("week").all
+		_item_quantity_res = AllAsinCostShipPrice.select("asin, week, SUM(quantity) as sum_q").where( ["ASIN = ?", _item_asin] ).group("week").order("week").all
 		if _item_quantity_res == nil
 			return nil
 		end

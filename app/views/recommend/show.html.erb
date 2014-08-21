@@ -1,5 +1,45 @@
 <div class='recommend' id='recommend'>
   <h2>Selected ASINs by your defined settings</h2>
+
+  <div class="accordion" id="accordion2">
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+          Settings<span class="muted collapsed-show" style="padding-left:20px;font-size:12px;">click to show</span><span class="muted collapsed-hide" style="padding-left:20px;font-size:12px;">click to hide</span>
+        </a>
+      </div>
+      <div id="collapseOne" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="span6">Setting Column</th>
+                <th class="span6">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @bound_seq.each do |bound_name| %>
+                <% if bound_name[0] != '_split_ele' %>
+                  <tr>
+                    <td><%= @settings_map[bound_name[0]] %> </td>
+                    <td>between <%= bound_name[1]+@local_params[bound_name[0]]+bound_name[2] %> to <%= bound_name[1]+@local_params[bound_name[0]+'_up']+bound_name[2] %></td>
+                  </tr>
+                <% else %>
+                  <% @check_seq.each do |check_name| %>
+                    <tr>
+                      <td><%= @settings_map[check_name[0]] %> </td>
+                      <td><%= @local_params[check_name[0]]=='0'? 'No' : 'Yes' %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="itemsContainer">
     <% @rec_items_final.each do |item| %>
       <% v = item %>

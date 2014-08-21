@@ -1,6 +1,6 @@
 <div class='recommend' id='recommend'>
   <h2>Recommended item to <%= @local_params['fulfil_name'] %></h2>
-  <div class="itemsContainer floatLeft">
+  <div class="itemsContainer floatLeft" style="margin-left:18%;">
       <div class="item no_href">
         <div class="itemInner">
           <div class="productImage">
@@ -18,7 +18,12 @@
       </div>
     <div class="splitLine"></div>
   </div>
-  <div class="itemsContainer floatRight">
+
+  <div class="floatLeft middle_vs">
+    <h1>VS</h1>
+  </div>
+
+  <div class="itemsContainer floatRight" style="margin-right:20%;">
     <% v = @ds_item %>
     <div class="item no_href">
       <div class="itemInner">
@@ -44,12 +49,57 @@
   </div>
 
   <div class="splitLine"></div>
+  <div class="accordion" id="accordion2">
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+          Settings<span class="muted collapsed-show" style="padding-left:20px;font-size:12px;">click to show</span><span class="muted collapsed-hide" style="padding-left:20px;font-size:12px;">click to hide</span>
+        </a>
+      </div>
+      <div id="collapseOne" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="span3">Setting Column</th>
+                <th class="span3">Value</th>
+                <th class="span3">Attribute of The ASIN</th>
+                <th class="span3">Attribute of The ASIN in DS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @bound_seq.each do |bound_name| %>
+                <% if bound_name[0] != '_split_ele' %>
+                  <tr>
+                    <td><%= @settings_map[bound_name[0]] %> </td>
+                    <td>between <%= bound_name[1]+@local_params[bound_name[0]]+bound_name[2] %> to <%= bound_name[1]+@local_params[bound_name[0]+'_up']+bound_name[2] %></td>
+                    <td><%= bound_name[1]+@other_physical_attrs[bound_name[0]]+bound_name[2] %> </td>
+                    <td><%= bound_name[1]+@ds_physical_attrs[bound_name[0]]+bound_name[2] %> </td>
+                  </tr>
+                <% else %>
+                  <% @check_seq.each do |check_name| %>
+                    <tr>
+                      <td><%= @settings_map[check_name[0]] %> </td>
+                      <td><%= @local_params[check_name[0]]=='0'? 'No' : 'Yes' %></td>
+                      <td><%= @other_physical_attrs[check_name[0]]=='0'? 'No' : 'Yes' %></td>
+                      <td><%= @ds_physical_attrs[check_name[0]]=='0'? 'No' : 'Yes' %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div class="splitLine"></div>
   
   <div class="item_graphs">
     <div class="item_graph">
       <h4 style="color:orange">Customer Demand Profile</h4>
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the shipment ratio weekly of the ASIN.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the shipment ratio weekly of the ASIN.</p></div>
       <div id='shipment_ratio_graph_per_week' class="display_show info_graph">
       </div>
     </div>
@@ -57,11 +107,11 @@
     <div class="item_graph">
       <h4 style="color:orange">Vendor Profile</h4>
       
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the weekly volumes.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the weekly volumes.</p></div>
       <div id='low_weekly_volumes' class="display_show info_graph">
       </div>
 
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you high peakiness reason.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you high peakiness reason.</p></div>
       <div id='other_high_peakiness' class="display_show info_graph">
       </div>
 
@@ -70,10 +120,10 @@
     <div class="item_graph">
       <h4 style="color:orange">ASIN Profile</h4>
       
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the customer returns weekly.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the customer returns weekly.</p></div>
       <div id='high_customer_returns' class="display_show info_graph">
       </div>
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the vendor returns weekly.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the vendor returns weekly.</p></div>
       <div id='high_vendor_returns' class="display_show info_graph">
       </div>
       
@@ -82,15 +132,15 @@
     <div class="item_graph">
       <h4 style="color:orange">COST Profile</h4>
       
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the List Price on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the List Price on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
       <div id='list_price' class="display_show info_graph">
       </div>
 
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Cost of Goods from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the Cost of Goods from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
       <div id='cost_of_goods' class="display_show info_graph">
       </div>
 
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the ship charge from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the ship charge from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
       <div id='ship_charge' class="display_show info_graph">
       </div>
       
@@ -145,10 +195,26 @@
   function draw_weekly_graph(_id, _type, _title, _subtitle, _ytitle, _vname, _data, _data1, _compare_data_down=1.13, _compare_data_up=1.87){
       _compare_arr_down = []
       _compare_arr_up = []
+      data_max = -1000000
+      data_min = 10000000
+
       for(var a in _data){
+        data_max = Math.max(data_max, _data[a]);
+        data_min = Math.min(data_min, _data[a]);
         _compare_arr_down.push(_compare_data_down)
         _compare_arr_up.push(_compare_data_up)
       }
+
+      for(var a in _data1){
+        data_max = Math.max(data_max, _data1[a]);
+        data_min = Math.min(data_min, _data1[a]);
+        _compare_arr_down.push(_compare_data_down)
+        _compare_arr_up.push(_compare_data_up)
+      }
+
+      data_max = Math.max(data_max, _compare_data_up);
+      data_min = Math.min(data_min, _compare_data_down);
+
       $("#"+_id).highcharts({
           chart: {
               type: _type
@@ -185,7 +251,41 @@
           yAxis: {
               title: {
                   text: _ytitle
-              }
+              },
+              max: data_max+data_max*0.05,
+              min: data_min - data_max*0.05,
+              minorGridLineWidth: 0,
+              gridLineWidth: 0,
+              alternateGridColor: null,
+              plotBands: [{ // Gentle breeze
+                  from: _compare_data_down,
+                  to: _compare_data_up,
+                  color: 'rgba(68, 170, 213, 0.1)',
+              }],
+              plotLines: [
+                {
+                  label:{
+                  text:''+_compare_data_down,
+                  align:'right',
+                  x:0,
+                  y:9
+                },
+                color:'red',      
+                dashStyle:'solid',     
+                value:_compare_data_down,               
+                width:2             
+              },{
+                  label:{
+                  text:''+_compare_data_up,
+                  align:'right',
+                  x:0,
+                  y:0
+                },
+                color:'red',      
+                dashStyle:'solid',     
+                value:_compare_data_up,               
+                width:2             
+              }]
           },
           tooltip: {
               headerFormat: '<span style="color:{series.color}">Week: </span><span>{point.key}</span><table>',
@@ -196,10 +296,22 @@
               useHTML: true
           },
           plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
+              spline: {
+                  lineWidth: 4,
+                  states: {
+                      hover: {
+                          lineWidth: 5
+                      }
+                  },
+                  marker: {
+                      enabled: false
+                  },
               }
+          },
+          legend:{
+              align:'center',
+              verticalAlign:'top',
+              y:60,
           },
           series: [{
               name: 'Recommended Item',
@@ -207,8 +319,7 @@
           },{
             name: 'Item in DS',
             data: _data1
-          }, {name: 'Down threshold', data: _compare_arr_down},
-          {name: 'Up threshold', data: _compare_arr_up}]
+          }]
       });
   }
 
@@ -229,7 +340,7 @@
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     color: '#000000',
                     connectorColor: '#000000',
                     formatter: function() {
@@ -270,6 +381,20 @@
       _compare_arr_down.push([_data1[_data1.length-1][0], _compare_data_down]);
       _compare_arr_up.push([_data1[_data1.length-1][0], _compare_data_up]);
     }
+
+    data_max = -1000000;
+    data_min = 10000000;
+    for(var a in _data){
+      data_max = Math.max(data_max, _data[a][1]);
+      data_min = Math.min(data_min, _data[a][1]);
+    }
+    for(var a in _data1){
+      data_max = Math.max(data_max, _data1[a][1]);
+      data_min = Math.min(data_min, _data1[a][1]);
+    }
+    data_max = Math.max(data_max, _compare_data_up);
+    data_min = Math.min(data_min, _compare_data_down);
+
     $('#'+_id).highcharts({
         chart: {
             type: _type
@@ -290,14 +415,65 @@
         yAxis: {
             title: {
                 text: _ytitle
-            }
+            },
+            max: data_max+data_max*0.05,
+            min: data_min - data_max*0.05,
+            minorGridLineWidth: 0,
+            gridLineWidth: 0,
+            alternateGridColor: null,
+            plotBands: [{ // Gentle breeze
+                from: _compare_data_down,
+                to: _compare_data_up,
+                color: 'rgba(68, 170, 213, 0.1)',
+            }],
+            plotLines: [
+              {
+                label:{
+                text:''+_compare_data_down,
+                align:'right',
+                x:0,
+                y:9
+              },
+              color:'red',      
+              dashStyle:'solid',     
+              value:_compare_data_down,               
+              width:2             
+            },{
+                label:{
+                text:''+_compare_data_up,
+                align:'right',
+                x:0,
+                y:0
+              },
+              color:'red',      
+              dashStyle:'solid',     
+              value:_compare_data_up,               
+              width:2             
+            }]
         },
         tooltip: {
             formatter: function() {
                     return _ytitle +': '+ this.y +' $';
             }
         },
-        
+        plotOptions: {
+            spline: {
+                lineWidth: 4,
+                states: {
+                    hover: {
+                        lineWidth: 5
+                    }
+                },
+                marker: {
+                    enabled: false
+                },
+            }
+        },
+        legend:{
+            align:'center',
+            verticalAlign:'top',
+            y:60,
+        },
         series: [{
             name: "Recommended Item",
             // Define the data points. All series have a dummy year
@@ -307,18 +483,6 @@
         }, {
             name: "Item in DS",
             data: _data1
-        }, {
-            name: 'Down threshold',
-            // Define the data points. All series have a dummy year
-            // of 1970/71 in order to be compared on the same x axis. Note
-            // that in JavaScript, months start at 0 for January, 1 for February etc.
-            data: _compare_arr_down
-        }, {
-            name: 'Up threshold',
-            // Define the data points. All series have a dummy year
-            // of 1970/71 in order to be compared on the same x axis. Note
-            // that in JavaScript, months start at 0 for January, 1 for February etc.
-            data: _compare_arr_up
         }]
     });
   }
@@ -335,7 +499,36 @@ $(document).ready(function(){
   subtitle = get_subtitle(<%= "[#{@other_low_weekly_volumes_math.join(",")}]" %>, <%= "[#{@ds_low_weekly_volumes_math.join(",")}]" %>);
   draw_weekly_graph('low_weekly_volumes', 'spline', 'Weekly Volumes', subtitle, "Weekly Volumes", "Weekly Volumes", [<% (9..27).each do |i| %><%= @other_low_weekly_volumes[i] %>,<% end %>], [<% (9..27).each do |i| %><%= @ds_low_weekly_volumes[i] %>,<% end %>], <%= @other_low_weekly_volumes_math[2].to_f - @other_low_weekly_volumes_math[2].to_f*0.1 %>, <%= @other_low_weekly_volumes_math[2].to_f + @other_low_weekly_volumes_math[2].to_f*0.1 %>);
 
-  draw_pie('other_high_peakiness', 'pie', 'High Peakiness', [['others', <%= "#{@other_high_peakiness[1]}" %>],{name:'High Peakiness', y:<%= "#{@other_high_peakiness[0]}" %>, sliced:true, selected:true}], [{name:'others', y:<%= "#{@ds_high_peakiness[1]}" %>, color:Highcharts.getOptions().colors[3]},{name:'High Peakiness', y:<%= "#{@ds_high_peakiness[0]}" %>, color:Highcharts.getOptions().colors[4], sliced:true, selected:true}]);
+  draw_pie('other_high_peakiness', 'pie', 'Peakiness', [
+    ['others', <%= "#{@other_high_peakiness[1]}" %>],
+    {
+      name:'Peakiness',
+       y:<%= "#{@other_high_peakiness[0]}" %>, 
+       sliced:true, 
+       selected:true,
+       dataLabels: {
+          enabled: true,
+          color: '#000000',
+          connectorColor: '#000000',
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+       }
+     }], [{
+      name:'others', 
+      y:<%= "#{@ds_high_peakiness[1]}" %>, 
+      color:Highcharts.getOptions().colors[3]
+     },{
+      name:'Peakiness', 
+      y:<%= "#{@ds_high_peakiness[0]}" %>, 
+      color:Highcharts.getOptions().colors[4], 
+      sliced:true, 
+      selected:true,
+      dataLabels: {
+          enabled: true,
+          color: '#000000',
+          connectorColor: '#000000',
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+      }
+    }]);
   
   subtitle = get_subtitle(<%= "[#{@other_high_customer_returns_math.join(",")}]" %>, <%= "[#{@ds_high_customer_returns_math.join(",")}]" %>);
   draw_weekly_graph('high_customer_returns', 'spline', 'Weekly Customer Returns', subtitle, "Weekly Customer Returns", "Weekly Customer Returns", [<% (9..27).each do |i| %><%= @other_high_customer_returns[i] %>,<% end %>], [<% (9..27).each do |i| %><%= @ds_high_customer_returns[i] %>,<% end %>], <%= @other_high_customer_returns_math[2].to_f - @other_high_customer_returns_math[2].to_f*0.1 %>, <%= @other_high_customer_returns_math[2].to_f + @other_high_customer_returns_math[2].to_f*0.1 %>);

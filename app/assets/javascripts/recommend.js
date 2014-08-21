@@ -1,18 +1,18 @@
 $(document).ready(function(){
-	$("input[type='checkbox']").change(function(){
-		_recommended_name = "#recommended_item_" + this.value;
-		_ds_name = "#ds_reason_item_" + this.value;
-		if(this.checked){
-			$(_recommended_name).show();
-			$(_ds_name).show();
-			$(_recommended_name).parent().show();
-		}
-		else{
-			$(_recommended_name).hide();
-			$(_ds_name).hide();
-			$(_recommended_name).parent().hide();
-		}
-	});
+	// $("input[type='checkbox']").change(function(){
+	// 	_recommended_name = "#recommended_item_" + this.value;
+	// 	_ds_name = "#ds_reason_item_" + this.value;
+	// 	if(this.checked){
+	// 		$(_recommended_name).show();
+	// 		$(_ds_name).show();
+	// 		$(_recommended_name).parent().show();
+	// 	}
+	// 	else{
+	// 		$(_recommended_name).hide();
+	// 		$(_ds_name).hide();
+	// 		$(_recommended_name).parent().hide();
+	// 	}
+	// });
 });
 
 $(document).ready(function(){
@@ -81,13 +81,13 @@ $(document).ready(function(){
 
 	$(".mwui-switch-btn span[change='OFF']").click(function(){
 		_this = $(this)
-		_this.parent().prev().val(1);
+		_this.parent().prev().val(0);
 		_this.parent().next().show();
 		_this.parent().hide();
 	});
 	$(".mwui-switch-btn span[change='ON']").click(function(){
 		_this = $(this)
-		_this.parent().prev().prev().val(0);
+		_this.parent().prev().prev().val(1);
 		_this.parent().prev().show();
 		_this.parent().hide();
 	});

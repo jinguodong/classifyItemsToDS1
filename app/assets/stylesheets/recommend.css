@@ -2,6 +2,14 @@
 	background: white;
 	border-radius: 5px;
 }
+
+#recommend td{
+	text-align: center;
+}
+#recommend th{
+	text-align: center;
+}
+
 #recommend .title_link{
 	float: right;
 	position: relative;
@@ -130,6 +138,17 @@
 	text-overflow: ellipsis;
 }
 
+#recommend .item_graphs{
+	margin: 15px 0 5px 0;
+}
+
+#recommend .item_graph{
+	margin: 15px 0 5px 0;
+}
+#recommend .item_graph .info_graph{
+	margin: 15px 0 5px 0;
+}
+
 #recommend .setting_form{
 }
 
@@ -181,6 +200,12 @@
 #recommend .setting_form .session_content .input_elements .input_element .element input.width_35{
 	width:35px;
 }
+#recommend .setting_form .session_content .input_elements .input_element .element .input-append input{
+	margin:0px;
+}
+#recommend .setting_form .session_content .input_elements .input_element .element .input-prepend input{
+	margin:0px;
+}
 #recommend .setting_form .session_content .input_elements .input_element .element .cube_size .cube_input input{
 	text-align: center;
 }
@@ -195,6 +220,16 @@
 #recommend .setting_form .session_content .input_elements .input_element .element span{
 	position:relative;
 	top:-3px;
+}
+#recommend .setting_form .session_content .input_elements .input_element .element .input-append span{
+	position:relative;
+	top:0px;
+	margin-right:5px;
+}
+#recommend .setting_form .session_content .input_elements .input_element .element .input-prepend span{
+	position:relative;
+	top:0px;
+	margin-left:5px;
 }
 #recommend .setting_form .session_content .input_result{
     margin-left: 20px;
@@ -232,6 +267,18 @@
     text-decoration: none;
 }
 
+#recommend .collapsed span.collapsed-show{
+	display: none;
+}
+#recommend .collapsed-hide{
+	display: none;
+}
+#recommend .collapsed .collapsed-hide{
+	display: inline-block;
+}
+
+
+
 .splitLine{
 	display: block;
 	clear:both;
@@ -239,6 +286,8 @@
 .padding_right_5{
 	padding-right:5px;
 }
+
+
 
 
 /* from Network:http://my.oschina.net/pandao/blog/83476; */
@@ -271,3 +320,31 @@
     background:#fff;
 }
 .mwui-switch-btn span.off{float:right;}
+
+a:hover{
+	text-decoration:none;
+}
+a:active{
+	text-decoration: none;
+}
+a:enabled{
+	text-decoration: none;
+}
+a:checked{
+	text-decoration: none;
+}
+a:focus{
+	text-decoration: none;
+}
+a::selection{
+	text-decoration: none;
+}
+
+.middle_vs{
+	margin-top:10%;
+	margin-left:5%;
+	color:orange;
+}
+.middle_vs h1{
+	font-size:100px;
+}

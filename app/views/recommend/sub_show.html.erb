@@ -1,6 +1,6 @@
 <div class='recommend' id='recommend'>
   <h2 class="floatLeft"><%= @reced_asin %></h2>
-  <%= link_to "Compare with similar items already in #{@local_params['fulfil_name']}", {:controller => "recommend", :action => "sub_show_rec", :id=>@hash_input, :local_params=>@local_params}, :class=>"title_link btn btn-mini" %>
+  <%= link_to "Compare with similar items already in #{@local_params['fulfil_name']}", {:controller => "recommend", :action => "sub_show_rec", :id=>@hash_input, :local_params=>@local_params}, :class=>"title_link btn" %>
   <div class="splitLine"></div>
   <div class="itemsContainer">
     <div class="item no_href">
@@ -18,115 +18,57 @@
         </div>
       </div>
     </div>
-    <div class="item_attrs">
-      <div class="item_attr">
-        <h4 style="color:orange">Customer Demand</h4>
-        <div class="attrs">
-          <div class="attr">
-            <span class="attr_name">Multiple Units per shipment</span><span class="attr_value"><%= @physical_attrs["shipment_ratio"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Multiple Units Per Order</span><span class="attr_value"><%= @physical_attrs["multiple_units_per_order"] %></span>
-          </div>
-        </div>
 
-      </div>
-    </div>
-
-    <div class="item_attrs">
-      <div class="item_attr">
-        <h4 style="color:orange">Vendor Profile</h4>
-        <div class="attrs">
-          <div class="attr">
-            <span class="attr_name">weekly volume</span><span class="attr_value"><%= @physical_attrs["low_weekly_volumes"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Variability of demand</span><span class="attr_value"><%= @physical_attrs["high_variability_of_demand_weekly"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Peakiness</span><span class="attr_value"><%= @physical_attrs["high_peakiness"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Customer returns</span><span class="attr_value"><%= @physical_attrs["high_customer_returns"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Vendor returns</span><span class="attr_value"><%= @physical_attrs["high_vendor_returns"] %></span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="item_attrs">
-      <div class="item_attr">
-        <h4 style="color:orange">ASIN Profile</h4>
-        <div class="attrs">
-          <div class="attr">
-            <span class="attr_name">Length</span><span class="attr_value"><%= @physical_attrs["cube_length"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Width</span><span class="attr_value"><%= @physical_attrs["cube_width"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Height</span><span class="attr_value"><%= @physical_attrs["cube_height"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Hazmat Compatibility</span><span class="attr_value"><%= @physical_attrs["hazmat_compatibility"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Overbox/gift wrap</span><span class="attr_value"><%= @physical_attrs["overbox_gift_wrap"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Multibox</span><span class="attr_value"><%= @physical_attrs["multibox"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">SIOC</span><span class="attr_value"><%= @physical_attrs["sioc"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">High risk of unhealthy stock</span><span class="attr_value"><%= @physical_attrs["high_risk_of_unhealthy_stock"] %></span>  
-          </div>
-          
-        </div>
-
-      </div>
-    </div>
-
-    <div class="item_attrs">
-      <div class="item_attr">
-        <h4 style="color:orange">Cost Profile</h4>
-        <div class="attrs">
-          <div class="attr">
-            <span class="attr_name">List Price</span><span class="attr_value"><%= @physical_attrs["average_list_price"] %></span>  
-          </div>
-          <div class="attr">
-            <span class="attr_name">Cost of Goods</span><span class="attr_value"><%= @physical_attrs["average_cost_of_goods"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Variability of Cost of Goods</span><span class="attr_value"><%= @physical_attrs["average_cost_of_goods"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Ship Charge</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Proportion of FCPU</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Proportion of VCPU</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
-          </div>
-          <div class="attr">
-            <span class="attr_name">Proportion of TCPU</span><span class="attr_value"><%= @physical_attrs["average_ship_charge"] %></span>
-          </div>
-        </div>
-
-      </div>
-    </div>
     <div class="splitLine"></div>
+  </div>
+
+  <div class="accordion" id="accordion2">
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+          Settings<span class="muted collapsed-show" style="padding-left:20px;font-size:12px;">click to show</span><span class="muted collapsed-hide" style="padding-left:20px;font-size:12px;">click to hide</span>
+        </a>
+        </a>
+      </div>
+      <div id="collapseOne" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th class="span4">Setting Column</th>
+                <th class="span4">Value</th>
+                <th class="span4">Attribute of The ASIN</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @bound_seq.each do |bound_name| %>
+                <% if bound_name[0] != '_split_ele' %>
+                  <tr>
+                    <td><%= @settings_map[bound_name[0]] %> </td>
+                    <td>between <%= bound_name[1]+@local_params[bound_name[0]]+bound_name[2] %> to <%= bound_name[1]+@local_params[bound_name[0]+'_up']+bound_name[2] %></td>
+                    <td><%= bound_name[1]+@physical_attrs[bound_name[0]]+bound_name[2] %> </td>
+                  </tr>
+                <% else %>
+                  <% @check_seq.each do |check_name| %>
+                    <tr>
+                      <td><%= @settings_map[check_name[0]] %> </td>
+                      <td><%= @local_params[check_name[0]]=='0'? 'No' : 'Yes' %></td>
+                      <td><%= @physical_attrs[check_name[0]]=='0'? 'No' : 'Yes' %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="item_graphs">
     <div class="item_graph">
       <h4 style="color:orange">Customer Demand Profile</h4>
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the shipment ratio weekly of the ASIN.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the shipment ratio weekly of the ASIN.</p></div>
       <div id='shipment_ratio_graph_per_week' class="display_show info_graph">
       </div>
     </div>
@@ -134,11 +76,11 @@
     <div class="item_graph">
       <h4 style="color:orange">Vendor Profile</h4>
       
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the weekly volumes.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the weekly volumes.</p></div>
       <div id='low_weekly_volumes' class="display_show info_graph">
       </div>
 
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you high peakiness reason.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you high peakiness reason.</p></div>
       <div id='high_peakiness' class="display_show info_graph">
       </div>
 
@@ -147,10 +89,10 @@
     <div class="item_graph">
       <h4 style="color:orange">ASIN Profile</h4>
       
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the customer returns weekly.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the customer returns weekly.</p></div>
       <div id='high_customer_returns' class="display_show info_graph">
       </div>
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the vendor returns weekly.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the vendor returns weekly.</p></div>
       <div id='high_vendor_returns' class="display_show info_graph">
       </div>
       
@@ -159,15 +101,15 @@
     <div class="item_graph">
       <h4 style="color:orange">COST Profile</h4>
       
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the List Price on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the List Price on www.amazon.com from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
       <div id='list_price' class="display_show info_graph">
       </div>
 
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the Cost of Goods from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the Cost of Goods from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
       <div id='cost_of_goods' class="display_show info_graph">
       </div>
 
-      <div class="note"><p class="note_content"><b>Note:</b>This graph shows you the ship charge from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
+      <div class="note hide"><p class="note_content"><b>Note:</b>This graph shows you the ship charge from 2014-3-1 to 2014-6-30. If there is no point on some day, it means that on that day there is no shipment of the item.</p></div>
       <div id='ship_charge' class="display_show info_graph">
       </div>
       
@@ -222,10 +164,16 @@
   function draw_weekly_graph(_id, _type, _title, _subtitle, _ytitle, _vname, _data, _compare_data_down=1.13, _compare_data_up=1.87){
       _compare_arr_down = []
       _compare_arr_up = []
+      data_max = -1000000
+      data_min = 10000000
       for(var a in _data){
+        data_max = Math.max(data_max, _data[a]);
+        data_min = Math.min(data_min, _data[a]);
         _compare_arr_down.push(_compare_data_down)
         _compare_arr_up.push(_compare_data_up)
       }
+      data_max = Math.max(data_max, _compare_data_up);
+      data_min = Math.min(data_min, _compare_data_down);
       $("#"+_id).highcharts({
           chart: {
               type: _type
@@ -262,7 +210,57 @@
           yAxis: {
               title: {
                   text: _ytitle
+              },
+              max: data_max+data_max*0.05,
+              min: data_min - data_max*0.05,
+              minorGridLineWidth: 0,
+              gridLineWidth: 0,
+              alternateGridColor: null,
+              plotBands: [{ // Gentle breeze
+                  from: _compare_data_down,
+                  to: _compare_data_up,
+                  color: 'rgba(68, 170, 213, 0.1)',
+              }],
+              plotLines: [
+                {
+                  label:{
+                  text:''+_compare_data_down,
+                  align:'right',
+                  x:0,
+                  y:9
+                },
+                color:'red',      
+                dashStyle:'solid',     
+                value:_compare_data_down,               
+                width:2             
+              },{
+                  label:{
+                  text:''+_compare_data_up,
+                  align:'right',
+                  x:0,
+                  y:0
+                },
+                color:'red',      
+                dashStyle:'solid',     
+                value:_compare_data_up,               
+                width:2             
+              }]
+          },
+          plotOptions: {
+              spline: {
+                  lineWidth: 4,
+                  states: {
+                      hover: {
+                          lineWidth: 5
+                      }
+                  },
+                  marker: {
+                      enabled: false
+                  },
               }
+          },
+          legend:{
+            enabled:false
           },
           tooltip: {
               headerFormat: '<span style="color:{series.color}">{series.name}: </span><span>{point.key}</span><table>',
@@ -272,17 +270,10 @@
               shared: true,
               useHTML: true
           },
-          plotOptions: {
-              column: {
-                  pointPadding: 0.2,
-                  borderWidth: 0
-              }
-          },
           series: [{
               name: 'Week',
               data: _data
-          },{name: 'Down threshold', data: _compare_arr_down},
-          {name: 'Up threshold', data: _compare_arr_up}]
+          }]
       });
   }
 
@@ -303,7 +294,7 @@
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     color: '#000000',
                     connectorColor: '#000000',
                     formatter: function() {
@@ -323,10 +314,16 @@
   function draw_time_point(_id, _type, _title, _subtitle, _ytitle, _data, _compare_data_down=1.13, _compare_data_up=1.87){
     _compare_arr_down = []
     _compare_arr_up = []
+    data_max = -1000000;
+    data_min = 10000000;
     for(var a in _data){
+      data_max = Math.max(data_max, _data[a][1]);
+      data_min = Math.min(data_min, _data[a][1]);
       _compare_arr_down.push([_data[a][0], _compare_data_down])
       _compare_arr_up.push([_data[a][0], _compare_data_up])
     }
+    data_max = Math.max(data_max, _compare_data_up);
+    data_min = Math.min(data_min, _compare_data_down);
     // alert(_compare_arr_down);
     $('#'+_id).highcharts({
         chart: {
@@ -348,32 +345,66 @@
         yAxis: {
             title: {
                 text: _ytitle
-            }
+            },
+            max: data_max+data_max*0.05,
+            min: data_min - data_max*0.05,
+            minorGridLineWidth: 0,
+            gridLineWidth: 0,
+            alternateGridColor: null,
+            plotBands: [{ // Gentle breeze
+                from: _compare_data_down,
+                to: _compare_data_up,
+                color: 'rgba(68, 170, 213, 0.1)',
+            }],
+            plotLines: [
+              {
+                label:{
+                text:''+_compare_data_down,
+                align:'right',
+                x:0,
+                y:9
+              },
+              color:'red',      
+              dashStyle:'solid',     
+              value:_compare_data_down,               
+              width:2             
+            },{
+                label:{
+                text:''+_compare_data_up,
+                align:'right',
+                x:0,
+                y:0
+              },
+              color:'red',      
+              dashStyle:'solid',     
+              value:_compare_data_up,               
+              width:2             
+            }]
         },
         tooltip: {
             formatter: function() {
                     return _ytitle +': '+ this.y +' $';
             }
         },
-        
+        plotOptions: {
+            spline: {
+                lineWidth: 4,
+                states: {
+                    hover: {
+                        lineWidth: 5
+                    }
+                },
+                marker: {
+                    enabled: false
+                },
+            }
+        },
         series: [{
             name: _ytitle + "of ASIN(<%= @item['asin'] %>)",
             // Define the data points. All series have a dummy year
             // of 1970/71 in order to be compared on the same x axis. Note
             // that in JavaScript, months start at 0 for January, 1 for February etc.
             data: _data
-        }, {
-            name: 'Down threshold',
-            // Define the data points. All series have a dummy year
-            // of 1970/71 in order to be compared on the same x axis. Note
-            // that in JavaScript, months start at 0 for January, 1 for February etc.
-            data: _compare_arr_down
-        }, {
-            name: 'Up threshold',
-            // Define the data points. All series have a dummy year
-            // of 1970/71 in order to be compared on the same x axis. Note
-            // that in JavaScript, months start at 0 for January, 1 for February etc.
-            data: _compare_arr_up
         }]
     });
   }
@@ -383,7 +414,20 @@ $(document).ready(function(){
 
   draw_weekly_graph('low_weekly_volumes', 'spline', 'Weekly Volumes', 'AVG: '+<%= @low_weekly_volumes_math[2] %>+' Variability: '+<%= @low_weekly_volumes_math[3] %>+' Coefficient of Variation: '+<%= @low_weekly_volumes_math[4] %>, "Weekly Volumes", "Weekly Volumes",  [<% (9..27).each do |i| %><%= @low_weekly_volumes[i] %>,<% end %>], <%= @low_weekly_volumes_math[2].to_f - @low_weekly_volumes_math[2].to_f*0.1 %>, <%= @low_weekly_volumes_math[2].to_f + @low_weekly_volumes_math[2].to_f*0.1 %>);
 
-  draw_pie('high_peakiness', 'pie', 'High Peakiness', [['others', <%= "#{@high_peakiness[1]}" %>],{name:'High Peakiness', y:<%= "#{@high_peakiness[0]}" %>, sliced:true, selected:true}]);
+  draw_pie('high_peakiness', 'pie', 'Peakiness', 
+    [['others', <%= "#{@high_peakiness[1]}" %>],
+    {
+      name:'Peakiness', 
+      y:<%= "#{@high_peakiness[0]}" %>, 
+      sliced:true,
+      selected:true, 
+      dataLabels: {
+          enabled: true,
+          color: '#000000',
+          connectorColor: '#000000',
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+      }
+    }]);
   
   draw_weekly_graph('high_customer_returns', 'spline', 'Weekly Customer Returns', 'AVG: '+<%= @high_customer_returns_math[2] %>+' Variability: '+<%= @high_customer_returns_math[3] %>+' Coefficient of Variation: '+<%= @high_customer_returns_math[4] %>, "Weekly Customer Returns", "Weekly Customer Returns", [<% (9..27).each do |i| %><%= @high_customer_returns[i] %>,<% end %>], <%= @high_customer_returns_math[2].to_f - @high_customer_returns_math[2].to_f*0.1 %>, <%= @high_customer_returns_math[2].to_f + @high_customer_returns_math[2].to_f*0.1 %>);
   
